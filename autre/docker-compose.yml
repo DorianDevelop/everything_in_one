@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:latest
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Admin'
+      MYSQL_USER: 'client'
+      MYSQL_PASSWORD: 'Client'
+      MYSQL_AUTHENTIFICATION_PLUGIN: mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  phpmyadmin:
+    container_name: pma
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
