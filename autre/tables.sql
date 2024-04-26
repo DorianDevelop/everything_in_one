@@ -30,25 +30,18 @@ CREATE TABLE notes (
 	id int not null AUTO_INCREMENT PRIMARY KEY,
     id_user int not null,
     title varchar(150) not null,
-    description varchar(1084),
+    description varchar(4096),
     FOREIGN KEY (id_user) REFERENCES users(id) 
         ON DELETE CASCADE
 );
 
-CREATE TABLE weeks (
-	id int not null AUTO_INCREMENT PRIMARY KEY,
-    id_user int not null,
-    begin_date DATE not null,
-    hours decimal default 0,
-    FOREIGN KEY (id_user) REFERENCES users(id) 
-        ON DELETE CASCADE   
-);
+ALTER TABLE notes CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
 CREATE TABLE hours (
 	id int not null AUTO_INCREMENT PRIMARY KEY,
-    id_week int not null,
-    input_hour decimal not null,
-    FOREIGN KEY (id_week) REFERENCES weeks(id) 
+    id_user int not null,
+    input_hour int not null,
+    FOREIGN KEY (id_user) REFERENCES users(id) 
         ON DELETE CASCADE   
 );
 
@@ -162,6 +155,8 @@ CREATE TABLE weights(
 /*INSERT*/
 
 INSERT INTO users(pseudo) VALUES ("_Dorian");
+
+INSERT INTO notes(id_user, title, description) VALUES (1, "Test", "Je test");
 
 /*FOOD TYPES : CUSTOM : MEAT : VEGGIE : FRUIT : CARB : PROCESSED : GRAINS : LIQUID : DAIRY*/
 /*MAIN NUTRIENT : BALANCED : FAT : CARBS : PROTEIN : SUGAR : FIBER*/
