@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -11,6 +12,7 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 
 app.use(helmet()); // https://expressjs.com/en/advanced/best-practice-security.html#use-helmet
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +22,7 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(createError.NotFound());
+	next(createError.NotFound());
 });
 
 // pass any unhandled errors to the error handler

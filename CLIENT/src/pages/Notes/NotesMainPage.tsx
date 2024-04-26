@@ -6,30 +6,39 @@ import { grey } from '@mui/material/colors';
 
 import AddIcon from '@mui/icons-material/Add';
 
-function generate(element: React.ReactElement) {
-	return [0, 1, 2].map((value) =>
-		React.cloneElement(element, {
-			key: value,
-		})
-	);
+interface Note {
+	id: number;
+	title: string;
+	description: string;
 }
 
 function NotesMainPage() {
+	const [notes, setNotes] = React.useState<Note[]>([]);
+	React.useEffect(() => {
+		const fetchNotes = async () => {
+			const response = await fetch('http://localhost:3000/notes/1');
+			const notes = (await response.json()) as Note[];
+			setNotes(notes);
+		};
+
+		fetchNotes();
+	}, []);
+
 	return (
 		<Box className="noteContent">
-			{useLocation().pathname === '/notes/details' ? (
-				<Outlet />
+			{useLocation().pathname !== '/notes' ? (
+				<Outlet context={[notes, setNotes]} />
 			) : (
 				<>
 					<IconButton aria-label="add" size="large" sx={{ marginY: 1 }} component={Link} to="/notes/details">
 						<AddIcon fontSize="inherit" />
 					</IconButton>
 					<Stack spacing={2} sx={{ width: '90%' }}>
-						{generate(
-							<ListItem sx={{ borderRadius: '10px', backgroundColor: grey[200], cursor: 'pointer' }}>
-								<ListItemText primary="Single-line item" secondary={'Test'} />
+						{notes.map((note) => (
+							<ListItem key={note.id} sx={{ borderRadius: '10px', backgroundColor: grey[200], cursor: 'pointer' }} component={Link} to={'/notes/' + note.id}>
+								<ListItemText primary={note.title} secondary={note.description} />
 							</ListItem>
-						)}
+						))}
 					</Stack>
 				</>
 			)}

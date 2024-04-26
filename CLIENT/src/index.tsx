@@ -64,7 +64,7 @@ const router = createBrowserRouter([
 				element: <NotesMainPage />,
 				children: [
 					{
-						path: 'details',
+						path: ':id',
 						element: <NotesDetailsPage />,
 					},
 				],
