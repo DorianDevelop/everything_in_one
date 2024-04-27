@@ -63,7 +63,7 @@ export default {
       };
 
       await axios
-        .post("http://localhost:3000/note/1", data)
+        .post("http://localhost:3000/note/" + this.$cookies.get("id_user"), data)
         .then((response) => {
           console.log("Note updated successfully:", response.data);
           this.saving = true;

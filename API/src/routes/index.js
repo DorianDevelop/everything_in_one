@@ -9,11 +9,22 @@ router.get("/", (req, res) => {
   res.send({ message: "Hello world" });
 });
 
-router.get("/users", (req, res) => {
-  const query = "SELECT * FROM `users`;";
+router.get("/login/:pseudo", (req, res) => {
+  const pseudo = req.params.pseudo;
+  const query = "SELECT * FROM `users` WHERE pseudo = ? LIMIT 1;";
 
-  db.query(query, (error, results) => {
+  db.query(query, [pseudo], (error, results) => {
     handler.handleReponse(res, error, results);
+  });
+});
+
+router.post("/signup", (req, res) => {
+  const datas = [req.body.pseudo];
+
+  const query = "INSERT INTO `users`(`pseudo`) VALUES (?)";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Creation succeed!");
   });
 });
 

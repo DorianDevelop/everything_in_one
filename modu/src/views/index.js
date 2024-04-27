@@ -11,14 +11,17 @@ import DietHome from "@/views/Diet/DietHome.vue";
 import DietSchedules from "@/views/Diet/DietSchedules.vue";
 import DietStats from "@/views/Diet/DietStats.vue";
 
+import LoginHome from "@/views/LoginHome.vue";
+
 export {
-	NotesList,
-	NotesDetails,
-	HoursMenu,
-	WorkoutsStats,
-	WorkoutsSchedules,
-	WorkoutsHome,
-	DietStats,
-	DietSchedules,
-	DietHome,
+  NotesList,
+  NotesDetails,
+  HoursMenu,
+  WorkoutsStats,
+  WorkoutsSchedules,
+  WorkoutsHome,
+  DietStats,
+  DietSchedules,
+  DietHome,
+  LoginHome,
 };

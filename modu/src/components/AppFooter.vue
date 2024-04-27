@@ -1,6 +1,6 @@
 <template>
   <v-layout class="overflow-visible">
-    <v-bottom-navigation mode="shift" v-if="value == 0" class="alternate-menu" :bg-color="color" :elevation="0">
+    <v-bottom-navigation mode="shift" v-if="value == 1" class="alternate-menu" :bg-color="color" :elevation="0">
       <v-btn to="/diet/home" value="recent">
         <v-icon>mdi-home</v-icon>
 
@@ -19,7 +19,7 @@
         <span>Stats</span>
       </v-btn>
     </v-bottom-navigation>
-    <v-bottom-navigation mode="shift" v-if="value == 1" class="alternate-menu" :bg-color="color" :elevation="0">
+    <v-bottom-navigation mode="shift" v-if="value == 2" class="alternate-menu" :bg-color="color" :elevation="0">
       <v-btn to="/workouts/home" value="recent">
         <v-icon>mdi-home</v-icon>
 
@@ -39,6 +39,12 @@
       </v-btn>
     </v-bottom-navigation>
     <v-bottom-navigation v-model="value" :bg-color="color" :elevation="0" mode="shift">
+      <v-btn to="/">
+        <v-icon>mdi-login</v-icon>
+
+        <span>Login</span>
+      </v-btn>
+
       <v-btn to="/diet/home">
         <v-icon>mdi-food</v-icon>
 
@@ -72,14 +78,14 @@ export default {
   computed: {
     color() {
       switch (this.value) {
-        case 0:
-          return "red-darken-2";
         case 1:
-          return "blue-darken-2";
+          return "red-darken-2";
         case 2:
-          return "green-darken-2";
+          return "blue-darken-2";
         case 3:
-          return "black";
+          return "green-darken-2";
+        case 4:
+          return "grey-darken-2";
         default:
           return "black";
       }
@@ -99,8 +105,8 @@ export default {
 }
 
 .v-bottom-navigation .v-bottom-navigation__content>.v-btn {
-  max-width: 25%;
-  min-width: 25%;
+  max-width: 20%;
+  min-width: 20%;
 }
 
 .alternate-menu {
