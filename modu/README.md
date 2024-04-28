@@ -14,12 +14,12 @@ This is the official scaffolding tool for Vuetify, designed to give you a head s
 
 Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
 
-| Package Manager                                                | Command        |
-|---------------------------------------------------------------|----------------|
-| [yarn](https://yarnpkg.com/getting-started)                   | `yarn install` |
-| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install)     | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                          | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                        | `bun install`  |
+| Package Manager                                           | Command        |
+| --------------------------------------------------------- | -------------- |
+| [yarn](https://yarnpkg.com/getting-started)               | `yarn install` |
+| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install) | `npm install`  |
+| [pnpm](https://pnpm.io/installation)                      | `pnpm install` |
+| [bun](https://bun.sh/#getting-started)                    | `bun install`  |
 
 After completing the installation, your environment is ready for Vuetify development.
 
@@ -39,7 +39,7 @@ This section covers how to start the development server and build your project f
 
 ### Starting the Development Server
 
-To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
+To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3001](http://localhost:3001):
 
 ```bash
 yarn dev
@@ -74,6 +74,7 @@ This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library wi
 - [Making a one-time donation with Paypal](https://paypal.me/vuetify)
 
 ## 📑 License
+
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2016-present Vuetify, LLC

@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  modu-client:
+    container_name: modu-client
+    build: .
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "4001:4001"
+    restart: always
+    networks:
+      - modu
+
+  modu-api:
+    container_name: modu-api
+    build: .
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "3001:3001"
+    restart: always
+    networks:
+      - modu
+
+networks:
+  modu:
