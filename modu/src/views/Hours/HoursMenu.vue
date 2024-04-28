@@ -43,7 +43,7 @@ export default {
     }),
     async mounted() {
         await axios
-            .get("http://modu-api:3001/hours/" + this.$cookies.get("id_user"))
+            .get("http://159.69.195.219:3001/hours/" + this.$cookies.get("id_user"))
             .then((response) => response.data)
             .then((data) => {
                 data.forEach(e => {
@@ -111,7 +111,7 @@ export default {
             };
 
             await axios
-                .post("http://modu-api:3001/hour/" + this.$cookies.get("id_user"), data)
+                .post("http://159.69.195.219:3001/hour/" + this.$cookies.get("id_user"), data)
                 .then((response) => {
                     console.log("Note updated successfully:", response.data);
                     this.saving = true;
@@ -125,7 +125,7 @@ export default {
             this.listHours.pop();
 
             await axios
-                .delete("http://modu-api:3001/hour/" + this.$cookies.get("id_user"))
+                .delete("http://159.69.195.219:3001/hour/" + this.$cookies.get("id_user"))
                 .then((response) => {
                     console.log("Note updated successfully:", response.data);
                     this.saving = true;
@@ -140,7 +140,7 @@ export default {
             this.listHours = [];
 
             await axios
-                .delete("http://modu-api:3001/hours/" + this.$cookies.get("id_user"))
+                .delete("http://159.69.195.219:3001/hours/" + this.$cookies.get("id_user"))
                 .then((response) => {
                     console.log("Note updated successfully:", response.data);
                     this.saving = true;

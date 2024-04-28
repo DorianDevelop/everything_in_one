@@ -25,6 +25,8 @@ services:
     restart: always
     networks:
       - modu
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 networks:
   modu:
