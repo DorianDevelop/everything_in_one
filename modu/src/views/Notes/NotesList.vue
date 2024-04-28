@@ -16,7 +16,7 @@ export default {
   }),
   mounted() {
     axios
-      .get("http://159.69.195.219:3001/notes/" + this.$cookies.get("id_user"))
+      .get("http://https://modu-api.dorian-faure.fr/notes/" + this.$cookies.get("id_user"))
       .then((response) => response.data)
       .then((data) => (this.notes = data));
   },
