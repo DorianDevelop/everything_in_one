@@ -43,7 +43,7 @@ export default {
             if (this.pseudo_name === '' || this.pseudo_name === undefined || this.pseudo_name.length <= 0) return;
 
             await axios
-                .get("http://https://modu-api.dorian-faure.fr/login/" + this.pseudo_name)
+                .get("https://modu-api.dorian-faure.fr/login/" + this.pseudo_name)
                 .then((response) => {
                     if (response.data.length === 0) {
                         this.user_message = "L'utilisateur n'exsite pas.";
@@ -62,7 +62,7 @@ export default {
             if (!result) return;
 
             await axios
-                .get("http://https://modu-api.dorian-faure.fr/login/" + this.pseudo_name)
+                .get("https://modu-api.dorian-faure.fr/login/" + this.pseudo_name)
                 .then((response) => {
                     if (response.data.length !== 0) {
                         this.user_message = "L'utilisateur existe déjà.";
@@ -75,7 +75,7 @@ export default {
                     }
 
                     axios
-                        .post("http://https://modu-api.dorian-faure.fr/signup", data)
+                        .post("https://modu-api.dorian-faure.fr/signup", data)
                         .then((response) => {
                             console.log("User successfully created:", response.data);
                         })
