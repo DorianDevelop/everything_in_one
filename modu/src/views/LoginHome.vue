@@ -1,16 +1,14 @@
 <template>
     <div class="wrapper">
         <v-card class="mx-auto px-6 py-8" v-if="!connected">
-            <v-form>
-                <v-text-field v-model="pseudo_name" class="mb-2" label="Nom / Pseudo" clearable
-                    :messages="user_message"></v-text-field>
+            <v-text-field v-model="pseudo_name" class="mb-2" label="Nom / Pseudo" clearable
+                :messages="user_message"></v-text-field>
 
-                <br>
+            <br>
 
-                <v-btn color="success" type="submit" size="large" variant="elevated" block @click="login">
-                    Se connecter
-                </v-btn>
-            </v-form>
+            <v-btn color="success" size="large" variant="elevated" block @click="login">
+                Se connecter
+            </v-btn>
         </v-card>
         <v-btn color="warning" class="mt-15" variant="elevated" @click="signup" v-if="!connected">
             Créer compte
