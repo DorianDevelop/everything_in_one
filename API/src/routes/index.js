@@ -1,6 +1,6 @@
 const express = require("express");
 const createConnection = require("../configs/database.config.js"); //Import la fonction créer un lien vers un base de données
-const db = createConnection("MODU"); //Créer le lien vers la base de donnée "modu"
+const db = createConnection("modu"); //Créer le lien vers la base de donnée "modu"
 const handler = require("../services/handler.js");
 
 const router = express.Router();
