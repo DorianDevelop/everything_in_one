@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const createConnection = (dbName) => {
   const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
+    host: "host.docker.internal",
     port: "3306",
     user: process.env.DB_USER,
     password: process.env.DB_PASS,

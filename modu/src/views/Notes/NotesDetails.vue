@@ -27,7 +27,7 @@ export default {
     if (id == -1) return;
 
     axios
-      .get("http://localhost:3001/note/" + id)
+      .get("http://modu-api:3001/note/" + id)
       .then((response) => response.data)
       .then((data) => (this.note = data[0]))
       .catch((error) => {
@@ -46,7 +46,7 @@ export default {
       };
 
       await axios
-        .put("http://localhost:3001/note/" + this.note.id, data)
+        .put("http://modu-api:3001/note/" + this.note.id, data)
         .then((response) => {
           console.log("Note updated successfully:", response.data);
           this.saving = true;
@@ -63,7 +63,7 @@ export default {
       };
 
       await axios
-        .post("http://localhost:3001/note/" + this.$cookies.get("id_user"), data)
+        .post("http://modu-api:3001/note/" + this.$cookies.get("id_user"), data)
         .then((response) => {
           console.log("Note updated successfully:", response.data);
           this.saving = true;
@@ -78,7 +78,7 @@ export default {
       }
 
       await axios
-        .delete("http://localhost:3001/note/" + this.note.id)
+        .delete("http://modu-api:3001/note/" + this.note.id)
         .then((response) => {
           console.log("Note updated successfully:", response.data);
           this.saving = true;

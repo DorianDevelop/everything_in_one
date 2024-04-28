@@ -39,7 +39,7 @@ This section covers how to start the development server and build your project f
 
 ### Starting the Development Server
 
-To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3001](http://localhost:3001):
+To start the development server with hot-reload, run the following command. The server will be accessible at [http://modu-api:3001](http://modu-api:3001):
 
 ```bash
 yarn dev
