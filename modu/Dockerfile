@@ -7,4 +7,4 @@ RUN npm run build
 
 EXPOSE 4001
 
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "serve", "--","--host","0.0.0.0"]

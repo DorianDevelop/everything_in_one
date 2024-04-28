@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"start": "NODE_ENV=production node ./src/bin/www",
-		"dev": "nodemon ./src/bin/www",
+		"dev": "nodemon ./src/app.js",
 		"build": "npx babel ./src -d ./dist",
 		"serve": "node ./dist/app.js",
 		"test": "jest",

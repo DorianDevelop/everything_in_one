@@ -2,7 +2,8 @@ version: "3.8"
 services:
   modu-client:
     container_name: modu-client
-    build: .
+    build:
+      context: ./modu
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules
@@ -14,7 +15,8 @@ services:
 
   modu-api:
     container_name: modu-api
-    build: .
+    build:
+      context: ./API
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules
