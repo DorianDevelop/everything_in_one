@@ -28,7 +28,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 5px;
+  padding: 5px 10px;
 }
 
 .list .v-btn {

@@ -100,7 +100,7 @@ export default {
 
 <style>
 .wrapper {
-  padding: 0 5px;
+  padding: 0 10px;
 }
 
 .wrapper .btn_icons {

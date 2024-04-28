@@ -165,6 +165,7 @@ export default {
 
 .wrapper .v-btn {
     width: 70%;
+    max-width: 340px;
 }
 
 .hours {
@@ -185,6 +186,7 @@ h3 {
 
 .inputs {
     width: 80%;
+    max-width: 340px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
