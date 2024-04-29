@@ -1,13 +1,8 @@
 <template>
   <div class="list">
     <v-btn icon="mdi-plus" variant="elevated" to="/notes/details/-1"> </v-btn>
-    <v-card
-      v-for="i in notes"
-      :key="i.id"
-      :title="i.title"
-      :subtitle="i.description"
-      :to="'/notes/details/' + i.id"
-    ></v-card>
+    <v-card v-for="i in notes" :key="i.id" :title="i.title" :subtitle="i.description"
+      :to="'/notes/details/' + i.id"></v-card>
   </div>
 </template>
 
@@ -24,7 +19,7 @@ export default {
       axios
         .get(
           "https://modu-api.dorian-faure.fr/notes/" +
-            this.$cookies.get("id_user")
+          this.$cookies.get("id_user")
         )
         .then((response) => response.data)
         .then((data) => (this.notes = data));

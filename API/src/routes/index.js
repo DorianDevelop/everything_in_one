@@ -219,4 +219,145 @@ router.delete("/hours/:id", (req, res) => {
   });
 });
 
+/**
+ * workout_exercices
+ */
+
+router.get("/workout_exercices/:id", (req, res) => {
+  const query =
+    "SELECT WE.*, E.name as exercice_name, E.id as exercice_id FROM `workout_exercices` as WE INNER JOIN `exercices` as E on E.id = WE.id_exercice WHERE WE.id_workout = ?; ";
+  const id = req.params.id;
+
+  db.query(query, [id], (error, results) => {
+    handler.handleReponse(res, error, results);
+  });
+});
+
+router.post("/workout_exercices", (req, res) => {
+  const datas = [req.body.id_exercice, req.body.id_workout, req.body.sets_number, req.body.notes];
+
+  const query =
+    "INSERT INTO `workout_exercices`(`id_exercice`, `id_workout`, `sets_number`, `notes`) VALUES (?, ?, ?, ?)";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Creation succeed!");
+  });
+});
+
+router.put("/workout_exercices/:id", (req, res) => {
+  const id = req.params.id;
+  const datas = [req.body.id_exercice, req.body.id_workout, req.body.sets_number, req.body.notes, id];
+
+  const query =
+    "UPDATE `workout_exercices` SET `id_exercice` = ?, `id_workout` = ?, `sets_number` = ?, `notes` = ? WHERE `id` = ?";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Modification succeed!");
+  });
+});
+
+router.delete("/workout_exercices/:id", (req, res) => {
+  const query = "DELETE FROM `workout_exercices` WHERE id = ?;";
+  const id = req.params.id;
+
+  db.query(query, [id], (error, results) => {
+    handler.handleReponse(res, error, null, "Delete succeed!");
+  });
+});
+
+/**
+ * exercices
+ */
+
+router.get("/exercices", (req, res) => {
+  const query = "SELECT * FROM `exercices`; ";
+
+  db.query(query, (error, results) => {
+    handler.handleReponse(res, error, results);
+  });
+});
+
+router.get("/exercice/:id", (req, res) => {
+  const query = "SELECT * FROM `exercices` WHERE id = ?; ";
+  const id = req.params.id;
+
+  db.query(query, [id], (error, results) => {
+    handler.handleReponse(res, error, results);
+  });
+});
+
+router.post("/exercice", (req, res) => {
+  const datas = [req.body.name, req.body.online_image];
+
+  const query = "INSERT INTO `exercice_muscles`(`name`, `online_image`) VALUES (?, ?)";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Creation succeed!");
+  });
+});
+
+router.put("/exercice/:id", (req, res) => {
+  const id = req.params.id;
+  const datas = [req.body.name, req.body.online_image, id];
+
+  const query = "UPDATE `exercice_muscles` SET `name` = ?, `online_image` = ? WHERE `id` = ?";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Modification succeed!");
+  });
+});
+
+router.delete("/exercice/:id", (req, res) => {
+  const query = "DELETE FROM `exercice` WHERE id = ?;";
+  const id = req.params.id;
+
+  db.query(query, [id], (error, results) => {
+    handler.handleReponse(res, error, null, "Delete succeed!");
+  });
+});
+
+/**
+ * muscles
+ */
+
+router.get("/muscles", (req, res) => {
+  const query = "SELECT * FROM `muscles`; ";
+
+  db.query(query, (error, results) => {
+    handler.handleReponse(res, error, results);
+  });
+});
+
+/**
+ * exercice_muscles
+ */
+
+router.get("/exercice_muscles/:id", (req, res) => {
+  const query = "SELECT * FROM `exercice_muscles` WHERE id_exercice = ?; ";
+  const id = req.params.id;
+
+  db.query(query, [id], (error, results) => {
+    handler.handleReponse(res, error, results);
+  });
+});
+
+router.post("/exercice_muscles", (req, res) => {
+  const datas = [req.body.id_exercice, req.body.id_muscle, req.body.role];
+
+  const query = "INSERT INTO `exercice_muscles`(`id_exercice`, `id_muscle`, `role`) VALUES (?, ?, ?)";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Creation succeed!");
+  });
+});
+
+router.delete("/exercice_muscles/:id", (req, res) => {
+  const datas = [req.body.id_exercice, req.body.id_muscle];
+  const query = "DELETE FROM `exercice_muscles` WHERE id_exercice = ? AND id_muscle = ?;";
+
+  db.query(query, datas, (error, results) => {
+    handler.handleReponse(res, error, null, "Delete succeed!");
+  });
+});
+
 module.exports = router;

@@ -32,6 +32,11 @@ const routes = [
         component: Views.WorkoutsSchedules,
       },
       { path: "stats", name: "WorkoutsStats", component: Views.WorkoutsStats },
+      {
+        path: "exercices",
+        name: "WorkoutsExercices",
+        component: Views.WorkoutsExercices,
+      },
     ],
   },
   {

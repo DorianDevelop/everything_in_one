@@ -1,41 +1,46 @@
 <template>
   <v-layout class="overflow-visible">
     <v-bottom-navigation mode="shift" v-if="value == 1" class="alternate-menu" :bg-color="color" :elevation="0">
-      <v-btn to="/diet/home" value="recent">
+      <v-btn to="/diet/home">
         <v-icon>mdi-home</v-icon>
 
         <span>Home</span>
       </v-btn>
 
-      <v-btn to="/diet/schedules" value="favorites">
+      <v-btn to="/diet/schedules">
         <v-icon>mdi-calendar-month</v-icon>
 
         <span>Schedules</span>
       </v-btn>
 
-      <v-btn to="/diet/stats" value="nearby">
+      <v-btn to="/diet/stats">
         <v-icon>mdi-chart-line</v-icon>
 
         <span>Stats</span>
       </v-btn>
     </v-bottom-navigation>
     <v-bottom-navigation mode="shift" v-if="value == 2" class="alternate-menu" :bg-color="color" :elevation="0">
-      <v-btn to="/workouts/home" value="recent">
+      <v-btn to="/workouts/home">
         <v-icon>mdi-home</v-icon>
 
         <span>Home</span>
       </v-btn>
 
-      <v-btn to="/workouts/schedules" value="favorites">
+      <v-btn to="/workouts/schedules">
         <v-icon>mdi-calendar-month</v-icon>
 
         <span>Schedules</span>
       </v-btn>
 
-      <v-btn to="/workouts/stats" value="nearby">
+      <v-btn to="/workouts/stats">
         <v-icon>mdi-chart-line</v-icon>
 
         <span>Stats</span>
+      </v-btn>
+      <v-btn to="/workouts/exercices">
+        <v-icon>mdi-dumbbell</v-icon>
+
+        <span>Exercices</span>
       </v-btn>
     </v-bottom-navigation>
     <v-bottom-navigation v-model="value" :bg-color="color" :elevation="0" mode="shift">
@@ -68,6 +73,7 @@
 
         <span>Notes</span>
       </v-btn>
+
     </v-bottom-navigation>
   </v-layout>
 </template>
@@ -111,10 +117,5 @@ export default {
 
 .alternate-menu {
   height: 44px !important;
-}
-
-.alternate-menu .v-bottom-navigation__content>.v-btn {
-  max-width: 33% !important;
-  min-width: 33% !important;
 }
 </style>

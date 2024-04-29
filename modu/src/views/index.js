@@ -6,6 +6,7 @@ import HoursMenu from "@/views/Hours/HoursMenu.vue";
 import WorkoutsHome from "@/views/Workouts/WorkoutsHome.vue";
 import WorkoutsSchedules from "@/views/Workouts/WorkoutsSchedules.vue";
 import WorkoutsStats from "@/views/Workouts/WorkoutsStats.vue";
+import WorkoutsExercices from "@/views/Workouts/WorkoutsExercices.vue";
 
 import DietHome from "@/views/Diet/DietHome.vue";
 import DietSchedules from "@/views/Diet/DietSchedules.vue";
@@ -24,4 +25,5 @@ export {
   DietSchedules,
   DietHome,
   LoginHome,
+  WorkoutsExercices,
 };
