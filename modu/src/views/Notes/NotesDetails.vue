@@ -1,15 +1,36 @@
 <template>
   <div class="wrapper">
     <div class="btn_icons">
-      <v-btn icon="mdi-arrow-left" variant="elevated" to="/notes" @click="saveNote">
+      <v-btn
+        icon="mdi-arrow-left"
+        variant="elevated"
+        to="/notes"
+        @click="saveNote"
+      >
       </v-btn>
-      <v-btn icon="mdi-trash-can" bg-color="red" variant="elevated" color="red-darken-4" to="/notes"
-        @click="deleteNote">
+      <v-btn
+        icon="mdi-trash-can"
+        bg-color="red"
+        variant="elevated"
+        color="red-darken-4"
+        to="/notes"
+        @click="deleteNote"
+      >
       </v-btn>
     </div>
-    <v-text-field hide-details="auto" placeholder="Titre" v-model="note.title"></v-text-field>
-    <v-textarea placeholder="Titre" :clearable="true" :no-resize="true" rounded="0" rows="19"
-      v-model="note.description"></v-textarea>
+    <v-text-field
+      hide-details="auto"
+      placeholder="Titre"
+      v-model="note.title"
+    ></v-text-field>
+    <v-textarea
+      placeholder="Titre"
+      :clearable="true"
+      :no-resize="true"
+      rounded="0"
+      rows="19"
+      v-model="note.description"
+    ></v-textarea>
   </div>
 </template>
 
@@ -63,7 +84,11 @@ export default {
       };
 
       await axios
-        .post("https://modu-api.dorian-faure.fr/note/" + this.$cookies.get("id_user"), data)
+        .post(
+          "https://modu-api.dorian-faure.fr/note/" +
+            this.$cookies.get("id_user"),
+          data
+        )
         .then((response) => {
           console.log("Note updated successfully:", response.data);
           this.saving = true;
@@ -86,7 +111,7 @@ export default {
         .catch((error) => {
           console.error("Error updating note:", error);
         });
-    }
+    },
   },
   beforeRouteLeave(to, from, next) {
     if (this.saving) {
