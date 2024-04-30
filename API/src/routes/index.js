@@ -349,10 +349,8 @@ router.post('/exercice_muscles', (req, res) => {
 	});
 });
 
-//TODO : remove :id
 router.delete('/exercice_muscles', (req, res) => {
 	const datas = [req.query.id_exercice, req.query.id_muscle];
-	console.log(datas);
 	const query = 'DELETE FROM `exercice_muscles` WHERE id_exercice = ? AND id_muscle = ?;';
 
 	db.query(query, datas, (error, results) => {

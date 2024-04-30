@@ -1,141 +1,150 @@
 <template>
   <div class="wrapper">
-    <v-col v-for="exercice in allExercices" :key="exercice.id">
-      <v-card color="blue-darken-2" variant="tonal" class="card">
-        <v-card-item>
-          <div>
-            <img
-              :src="
-                exercice.online_image !== 'UUUUUUUUUUUUUU' &&
-                exercice.online_image !== ''
-                  ? exercice.online_image
-                  : 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/1024px-Blank_Square.svg.png'
-              "
-              :alt="exercice.online_image"
-            />
+    <v-text-field
+      class="research-input"
+      placeholder="Bench.."
+      clearable
+      variant="solo-filled"
+      rounded="0"
+      v-model="searchTerm"
+    ></v-text-field>
+    <v-card
+      color="blue-darken-2"
+      variant="tonal"
+      class="card"
+      v-for="exercice in filteredByName"
+      :key="exercice.id"
+    >
+      <v-card-item>
+        <div>
+          <img
+            :src="
+              exercice.online_image !== 'UUUUUUUUUUUUUU' &&
+              exercice.online_image !== ''
+                ? exercice.online_image
+                : 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/1024px-Blank_Square.svg.png'
+            "
+            :alt="exercice.online_image"
+          />
 
-            <div class="text-overline mb-1">
-              {{ exercice.name }}
-            </div>
+          <div class="text-overline mb-1">
+            {{ exercice.name }}
           </div>
-        </v-card-item>
-        <v-dialog max-width="600">
-          <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-              v-bind="activatorProps"
-              color="blue-darken-2"
-              :text="exercice.id === -1 ? 'CRÉER' : 'MODIFIER'"
-              variant="outlined"
-              @click="getExerciceMuscleLink(exercice.id)"
-            ></v-btn>
-          </template>
+        </div>
+      </v-card-item>
+      <v-dialog max-width="600">
+        <template v-slot:activator="{ props: activatorProps }">
+          <v-btn
+            v-bind="activatorProps"
+            color="blue-darken-2"
+            :text="exercice.id === -1 ? 'CRÉER' : 'MODIFIER'"
+            variant="outlined"
+            @click="getExerciceMuscleLink(exercice.id)"
+          ></v-btn>
+        </template>
 
-          <template v-slot:default="{ isActive }">
-            <v-card>
-              <div class="dialog-details">
-                <v-text-field
-                  hide-details="auto"
-                  placeholder="Développé couché"
-                  label="Exercice Name"
-                  rounded="0"
-                  v-model="exercice.name"
-                ></v-text-field>
-                <v-text-field
-                  placeholder="https://image_exercice.jpg"
-                  label="Exercice Image URL"
-                  rounded="0"
-                  v-model="exercice.online_image"
-                ></v-text-field>
-                <div class="selects">
-                  <v-select
-                    label="Groupes musculaires"
-                    :items="allMuscles"
-                    item-title="muscle_group"
-                    item-value="id"
-                    multiple
-                    v-model="newLink.muscles"
-                    variant="outlined"
-                    :disabled="exercice.id === -1"
-                  ></v-select>
-                  <v-select
-                    label="Rôles"
-                    :items="allRoles"
-                    item-title="label"
-                    item-value="value"
-                    v-model="newLink.role"
-                    variant="outlined"
-                    :disabled="exercice.id === -1"
-                  ></v-select>
-                </div>
-                <v-btn
+        <template v-slot:default="{ isActive }">
+          <v-card>
+            <div class="dialog-details">
+              <v-text-field
+                hide-details="auto"
+                placeholder="Développé couché"
+                label="Exercice Name"
+                rounded="0"
+                v-model="exercice.name"
+              ></v-text-field>
+              <v-text-field
+                placeholder="https://image_exercice.jpg"
+                label="Exercice Image URL"
+                rounded="0"
+                v-model="exercice.online_image"
+              ></v-text-field>
+              <div class="selects">
+                <v-select
+                  label="Groupes musculaires"
+                  :items="allMuscles"
+                  item-title="muscle_group"
+                  item-value="id"
+                  multiple
+                  v-model="newLink.muscles"
+                  variant="outlined"
                   :disabled="exercice.id === -1"
-                  text="Ajout groupe"
-                  color="green-darken-2"
-                  class="ajout-btn"
-                  @click="saveExerciceMuscleLink(exercice.id)"
-                ></v-btn>
-                <v-data-table
-                  :headers="[
-                    {
-                      title: 'Muscles',
-                      key: 'id_muscle',
-                      value: (item) =>
-                        `${muscleById(item.id_muscle).muscle_group}`,
-                    },
-                    { title: 'Role', key: 'role' },
-                    { title: 'Actions', key: 'actions', sortable: false },
-                  ]"
-                  :items="allExerciceMuscles"
-                  :sort-by="[{ key: 'role', order: 'desc' }]"
-                  v-if="allExerciceMuscles.length > 0"
-                >
-                  <template v-slot:item.actions="{ item }">
-                    <v-icon
-                      size="small"
-                      @click="
-                        deleteExerciceMuscleLink(
-                          item.id_exercice,
-                          item.id_muscle
-                        )
-                      "
-                    >
-                      mdi-delete
-                    </v-icon>
-                  </template>
-                </v-data-table>
+                ></v-select>
+                <v-select
+                  label="Rôles"
+                  :items="allRoles"
+                  item-title="label"
+                  item-value="value"
+                  v-model="newLink.role"
+                  variant="outlined"
+                  :disabled="exercice.id === -1"
+                ></v-select>
               </div>
-              <v-card-actions class="actions">
-                <v-btn
-                  text="Save"
-                  color="green-darken-2"
-                  @click="
-                    () => {
-                      isActive.value = false;
-                      saveExercice(exercice);
-                    }
-                  "
-                ></v-btn>
-                <v-btn
-                  text="Close"
-                  color="gray-darken-2"
-                  @click="isActive.value = false"
-                ></v-btn>
-                <v-btn
-                  text="Delete"
-                  color="red-darken-2"
-                  @click="
-                    () => {
-                      isActive.value = false;
-                      deleteExercice(exercice.id);
-                    }
-                  "
-                ></v-btn>
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-      </v-card>
-    </v-col>
+              <v-btn
+                :disabled="exercice.id === -1"
+                text="Ajout groupe"
+                color="green-darken-2"
+                class="ajout-btn"
+                @click="saveExerciceMuscleLink(exercice.id)"
+              ></v-btn>
+              <v-data-table
+                :headers="[
+                  {
+                    title: 'Muscles',
+                    key: 'id_muscle',
+                    value: (item) =>
+                      `${muscleById(item.id_muscle).muscle_group}`,
+                  },
+                  { title: 'Role', key: 'role' },
+                  { title: 'Actions', key: 'actions', sortable: false },
+                ]"
+                :items="allExerciceMuscles"
+                :sort-by="[{ key: 'role', order: 'desc' }]"
+                v-if="allExerciceMuscles.length > 0"
+              >
+                <template v-slot:item.actions="{ item }">
+                  <v-icon
+                    size="small"
+                    @click="
+                      deleteExerciceMuscleLink(item.id_exercice, item.id_muscle)
+                    "
+                  >
+                    mdi-delete
+                  </v-icon>
+                </template>
+              </v-data-table>
+            </div>
+            <v-card-actions class="actions">
+              <v-btn
+                text="Save"
+                color="green-darken-2"
+                @click="
+                  () => {
+                    isActive.value = false;
+                    saveExercice(exercice);
+                  }
+                "
+              ></v-btn>
+              <v-btn
+                text="Close"
+                color="gray-darken-2"
+                @click="isActive.value = false"
+              ></v-btn>
+              <v-btn
+                text="Delete"
+                color="red-darken-2"
+                @click="
+                  () => {
+                    isActive.value = false;
+                    deleteExercice(exercice.id);
+                  }
+                "
+              ></v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
+    </v-card>
   </div>
 </template>
 
@@ -160,7 +169,17 @@ export default {
       muscles: [],
       role: 0,
     },
+    searchTerm: "",
   }),
+  computed: {
+    filteredByName() {
+      return this.allExercices.filter((ex) =>
+        ex.name === null || this.searchTerm === null
+          ? ex.name
+          : ex.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    },
+  },
   async mounted() {
     await this.loadAllExercices();
     await axios
@@ -290,15 +309,15 @@ export default {
 <style scoped>
 .wrapper {
   display: flex;
-  gap: 1rem;
-  justify-content: space-evenly;
+  gap: 1.5rem;
+  justify-content: center;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
 
   padding: 1rem 5rem;
   max-height: calc(100vh - 100px);
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .actions {
@@ -356,5 +375,14 @@ export default {
 
 .dialog-details {
   padding: 0.8rem;
+}
+
+.research-input {
+  position: fixed;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: 250px;
 }
 </style>
