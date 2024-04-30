@@ -1,6 +1,12 @@
 <template>
   <v-layout class="overflow-visible">
-    <v-bottom-navigation mode="shift" v-if="value == 1" class="alternate-menu" :bg-color="color" :elevation="0">
+    <v-bottom-navigation
+      mode="shift"
+      v-if="value == 1"
+      class="alternate-menu"
+      :bg-color="color"
+      :elevation="0"
+    >
       <v-btn to="/diet/home">
         <v-icon>mdi-home</v-icon>
 
@@ -19,7 +25,13 @@
         <span>Stats</span>
       </v-btn>
     </v-bottom-navigation>
-    <v-bottom-navigation mode="shift" v-if="value == 2" class="alternate-menu" :bg-color="color" :elevation="0">
+    <v-bottom-navigation
+      mode="shift"
+      v-if="value == 2"
+      class="alternate-menu"
+      :bg-color="color"
+      :elevation="0"
+    >
       <v-btn to="/workouts/home">
         <v-icon>mdi-home</v-icon>
 
@@ -43,7 +55,12 @@
         <span>Exercices</span>
       </v-btn>
     </v-bottom-navigation>
-    <v-bottom-navigation v-model="value" :bg-color="color" :elevation="0" mode="shift">
+    <v-bottom-navigation
+      v-model="value"
+      :bg-color="color"
+      :elevation="0"
+      mode="shift"
+    >
       <v-btn to="/">
         <v-icon>mdi-login</v-icon>
 
@@ -73,7 +90,6 @@
 
         <span>Notes</span>
       </v-btn>
-
     </v-bottom-navigation>
   </v-layout>
 </template>
@@ -97,6 +113,26 @@ export default {
       }
     },
   },
+  mounted() {
+    let path = window.location.pathname.split("/");
+    switch (path[1]) {
+      case "diet":
+        this.value = 1;
+        break;
+      case "workouts":
+        this.value = 2;
+        break;
+      case "hours":
+        this.value = 3;
+        break;
+      case "notes":
+        this.value = 4;
+        break;
+      default:
+        this.value = 0;
+        break;
+    }
+  },
 };
 </script>
 
@@ -110,7 +146,7 @@ export default {
   flex-direction: column;
 }
 
-.v-bottom-navigation .v-bottom-navigation__content>.v-btn {
+.v-bottom-navigation .v-bottom-navigation__content > .v-btn {
   max-width: 20%;
   min-width: 20%;
 }

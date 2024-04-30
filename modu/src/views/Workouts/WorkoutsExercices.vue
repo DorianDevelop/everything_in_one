@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <v-btn class="new-btn" color="blue-darken-2">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
     <v-col v-for="exercice in allExercices" :key="exercice.id">
       <v-card color="blue-darken-2" variant="tonal" class="card">
         <v-card-item>
@@ -24,7 +27,7 @@
             <v-btn
               v-bind="activatorProps"
               color="blue-darken-2"
-              text="Open Dialog"
+              :text="exercice.id === -1 ? 'CRÉER' : 'MODIFIER'"
               variant="outlined"
               @click="getExerciceMuscleLink(exercice.id)"
             ></v-btn>
@@ -55,6 +58,7 @@
                     multiple
                     v-model="newLink.muscles"
                     variant="outlined"
+                    :disabled="exercice.id === -1"
                   ></v-select>
                   <v-select
                     label="Rôles"
@@ -63,9 +67,11 @@
                     item-value="value"
                     v-model="newLink.role"
                     variant="outlined"
+                    :disabled="exercice.id === -1"
                   ></v-select>
                 </div>
                 <v-btn
+                  :disabled="exercice.id === -1"
                   text="Ajout groupe"
                   color="green-darken-2"
                   class="ajout-btn"
@@ -120,7 +126,12 @@
                 <v-btn
                   text="Delete"
                   color="red-darken-2"
-                  @click="isActive.value = false"
+                  @click="
+                    () => {
+                      isActive.value = false;
+                      deleteExercice(exercice.id);
+                    }
+                  "
                 ></v-btn>
               </v-card-actions>
             </v-card>
@@ -158,6 +169,11 @@ export default {
       .get("https://modu-api.dorian-faure.fr/exercices")
       .then((response) => response.data)
       .then((data) => {
+        this.allExercices.push({
+          id: -1,
+          name: "NEW",
+          online_image: "",
+        });
         data.forEach((e) => {
           let temp = e;
           temp["isActive"] = false;
@@ -174,12 +190,15 @@ export default {
   methods: {
     async saveExercice(exercice) {
       if (exercice.id === undefined) return;
+      if (exercice.id === -1) {
+        this.createExercice(exercice);
+        return;
+      }
       let data = {
         name: exercice.name,
         online_image: exercice.online_image,
       };
 
-      console.log(data, exercice);
       axios
         .put("https://modu-api.dorian-faure.fr/exercice/" + exercice.id, data)
         .then((response) => {
@@ -187,6 +206,21 @@ export default {
         })
         .catch((error) => {
           console.error("Error updating exercice:", error);
+        });
+    },
+    async createExercice(exercice) {
+      let data = {
+        name: exercice.name,
+        online_image: exercice.online_image,
+      };
+
+      axios
+        .post("https://modu-api.dorian-faure.fr/exercice", data)
+        .then((response) => {
+          console.log("Exercice created successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error creating exercice:", error);
         });
     },
     async getExerciceMuscleLink(exercice_id) {
@@ -198,6 +232,7 @@ export default {
         });
     },
     async saveExerciceMuscleLink(exercice_id) {
+      if (exercice_id === undefined || exercice_id === -1) return;
       await this.newLink.muscles.forEach((muscle) => {
         let data = {
           id_exercice: exercice_id,
@@ -213,9 +248,9 @@ export default {
             console.error("Error updating links:", error);
           });
         this.allExerciceMuscles.push(data);
-        this.newLink.muscles = [];
-        this.newLink.role = 0;
       });
+      this.newLink.muscles = [];
+      this.newLink.role = 0;
     },
     muscleById(id) {
       return this.allMuscles.find((item) => item.id === id);
@@ -235,7 +270,6 @@ export default {
       await axios
         .delete("https://modu-api.dorian-faure.fr/exercice_muscles/0", data)
         .then((response) => {
-          console.log(response);
           console.log("Link deleted successfully:", response.data);
         })
         .catch((error) => {
@@ -243,6 +277,16 @@ export default {
         });
 
       this.getExerciceMuscleLink(id_exercice);
+    },
+    async deleteExercice(exercice_id) {
+      await axios
+        .delete("https://modu-api.dorian-faure.fr/exercice/" + exercice_id)
+        .then((response) => {
+          console.log("Exercice deleted successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error deleting ex:", error);
+        });
     },
   },
 };
@@ -293,6 +337,9 @@ export default {
 .card img {
   max-height: 100px;
   max-width: 100px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
 }
 
 .selects {
@@ -308,5 +355,13 @@ export default {
 .ajout-btn {
   display: block;
   margin: 0.5rem auto 1rem auto;
+}
+
+.new-btn {
+  width: 150px;
+  height: 50px;
+  position: fixed;
+  top: 1.2rem;
+  z-index: 999;
 }
 </style>

@@ -306,7 +306,7 @@ router.put('/exercice/:id', (req, res) => {
 });
 
 router.delete('/exercice/:id', (req, res) => {
-	const query = 'DELETE FROM `exercice` WHERE id = ?;';
+	const query = 'DELETE FROM `exercices` WHERE id = ?;';
 	const id = req.params.id;
 
 	db.query(query, [id], (error, results) => {
@@ -352,6 +352,7 @@ router.post('/exercice_muscles', (req, res) => {
 //TODO : remove :id
 router.delete('/exercice_muscles', (req, res) => {
 	const datas = [req.body.id_exercice, req.body.id_muscle];
+	console.log(datas);
 	const query = 'DELETE FROM `exercice_muscles` WHERE id_exercice = ? AND id_muscle = ?;';
 
 	db.query(query, datas, (error, results) => {
