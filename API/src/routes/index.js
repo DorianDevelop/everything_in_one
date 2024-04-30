@@ -268,7 +268,7 @@ router.delete('/workout_exercices/:id', (req, res) => {
  */
 
 router.get('/exercices', (req, res) => {
-	const query = 'SELECT * FROM `exercices`; ';
+	const query = 'SELECT * FROM `exercices` ORDER BY name ASC; ';
 
 	db.query(query, (error, results) => {
 		handler.handleReponse(res, error, results);
@@ -351,7 +351,7 @@ router.post('/exercice_muscles', (req, res) => {
 
 //TODO : remove :id
 router.delete('/exercice_muscles', (req, res) => {
-	const datas = [req.body.id_exercice, req.body.id_muscle];
+	const datas = [req.query.id_exercice, req.query.id_muscle];
 	console.log(datas);
 	const query = 'DELETE FROM `exercice_muscles` WHERE id_exercice = ? AND id_muscle = ?;';
 
