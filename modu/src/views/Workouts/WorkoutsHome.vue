@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: "WorkoutsHome",
     data() {
@@ -29,18 +31,25 @@ export default {
         async getCurentDateWorkouts() {
 
             this.allWorkouts = [];
+            console.log(`https://modu-api.dorian-faure.fr/workouts?id_user=${this.$cookies.get("id_user")}&the_date=${this.formatDateToYYYYMMDD(this.selectedDate)}`);
             await axios
                 .get(
-                    `https://modu-api.dorian-faure.fr/exercice_muscles?id_user=${this.$cookies.get("id_user")}&the_date=${this.selectedDate}`
+                    `https://modu-api.dorian-faure.fr/workouts?id_user=${this.$cookies.get("id_user")}&the_date=${this.formatDateToYYYYMMDD(this.selectedDate)}`
                 )
                 .then((response) => response.data)
                 .then((data) => {
+                    console.log(data);
                     this.allWorkouts = data;
                 });
         },
 
 
-
+        formatDateToYYYYMMDD(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Adding 1 because getMonth() returns zero-based index
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
         getPreviousDate() {
             const newDate = new Date(this.selectedDate);
             newDate.setDate(newDate.getDate() - 1);
