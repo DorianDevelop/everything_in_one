@@ -106,7 +106,7 @@ router.get("/meal/:id", (req, res) => {
  * workouts
  */
 
-router.get("/workouts/:id", (req, res) => {
+router.get("/workouts", (req, res) => {
   const datas = [req.query.id_user, req.query.the_date];
   const query = "SELECT * FROM `workouts` WHERE id_user = ? AND the_date = ?;";
 
