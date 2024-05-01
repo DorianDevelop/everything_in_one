@@ -93,6 +93,7 @@ CREATE TABLE workouts(
 	id int not null AUTO_INCREMENT PRIMARY KEY,
     start_min float not null  default 780,
     duration_min float not null  default 30,
+    name varchar(150) not null default "Weightlifting",
     type varchar(10) not null  default "MOYEN",
     the_date DATE NOT NULL DEFAULT (CURRENT_DATE),
     id_user int not null,
