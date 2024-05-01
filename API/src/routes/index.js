@@ -107,10 +107,10 @@ router.get("/meal/:id", (req, res) => {
  */
 
 router.get("/workouts/:id", (req, res) => {
-  const query = "SELECT * FROM `workouts` WHERE id_user = ?;";
-  const id = req.params.id;
+  const datas = [req.query.id_user, req.query.the_date];
+  const query = "SELECT * FROM `workouts` WHERE id_user = ? AND the_date = ?;";
 
-  db.query(query, [id], (error, results) => {
+  db.query(query, datas, (error, results) => {
     handler.handleReponse(res, error, results);
   });
 });

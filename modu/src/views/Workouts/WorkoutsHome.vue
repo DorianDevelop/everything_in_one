@@ -22,14 +22,16 @@ export default {
             allWorkouts: [],
         };
     },
+    mounted() {
+        this.getCurentDateWorkouts();
+    },
     methods: {
         async getCurentDateWorkouts() {
 
             this.allWorkouts = [];
             await axios
                 .get(
-                    "https://modu-api.dorian-faure.fr/workouts/" +
-                    this.$cookies.get("id_user")
+                    `https://modu-api.dorian-faure.fr/exercice_muscles?id_user=${this.$cookies.get("id_user")}&the_date=${this.selectedDate}`
                 )
                 .then((response) => response.data)
                 .then((data) => {
@@ -43,11 +45,13 @@ export default {
             const newDate = new Date(this.selectedDate);
             newDate.setDate(newDate.getDate() - 1);
             this.selectedDate = newDate;
+            this.getCurentDateWorkouts();
         },
         getNextDate() {
             const newDate = new Date(this.selectedDate);
             newDate.setDate(newDate.getDate() + 1);
             this.selectedDate = newDate;
+            this.getCurentDateWorkouts();
         },
         formatDate(date) {
             const daysOfWeek = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
