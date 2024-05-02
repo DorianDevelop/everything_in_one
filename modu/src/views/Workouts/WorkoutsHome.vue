@@ -70,7 +70,14 @@
           CLOSE
           <v-icon icon="mdi-arrow-up" size="small" end></v-icon>
         </v-btn>
-        <v-btn class="ma-2" color="red-darken-2" size="small"> DELETE </v-btn>
+        <v-btn
+          class="ma-2"
+          color="red-darken-2"
+          size="small"
+          @click="deleteWorkout"
+        >
+          DELETE
+        </v-btn>
       </div>
       <div class="add-workout">
         <v-autocomplete
@@ -140,12 +147,27 @@
       </v-data-table-virtual>
 
       <div class="change-infos">
-        <v-text-field
-          hide-details="auto"
-          placeholder="Push spé. Épaule"
-          label="Workout name"
-          v-model="getWorkoutById(this.selected.id).name"
-        ></v-text-field>
+        <div class="times-select">
+          <v-text-field
+            hide-details="auto"
+            placeholder="Push spé. Épaule"
+            label="Workout name"
+            v-model="getWorkoutById(this.selected.id).name"
+          ></v-text-field>
+          <v-select
+            label="Difficulté de l'entrainement"
+            :items="[
+              { title: 'FACILE' },
+              { title: 'MOYEN' },
+              { title: 'DUR' },
+              { title: 'TRÈS DUR' },
+            ]"
+            item-title="title"
+            item-value="title"
+            v-model="getWorkoutById(selected.id).type"
+            variant="outlined"
+          ></v-select>
+        </div>
         <div class="times-select">
           <v-select
             label="Début entrainement"
@@ -249,35 +271,40 @@ export default {
               .post("https://modu-api.dorian-faure.fr/workout/", datas)
               .then((response) => {
                 console.log("Workout created successfully:", response.data);
-                this.allExTODO
-                  .forEach((exo) => {
-                    let data = {
-                      id_exercice: exo.id,
-                      id_workout: new_id,
-                      sets_number: exo.sets_number,
-                      notes: exo.notes,
-                      the_order: exo.the_order,
-                    };
+                if (this.selected.allExTODO.length > 0) {
+                  this.selected.allExTODO
+                    .forEach((exo) => {
+                      let data = {
+                        id_exercice: exo.id_exercice,
+                        id_workout: new_id,
+                        sets_number: exo.sets_number,
+                        notes: exo.notes,
+                        the_order: exo.the_order,
+                      };
 
-                    axios
-                      .post(
-                        "https://modu-api.dorian-faure.fr/workout_exercices",
-                        data
-                      )
-                      .then((response) => {
-                        console.log(
-                          "Exercice linked successfully:",
-                          response.data
-                        );
-                      })
-                      .catch((error) => {
-                        console.error("Error linking exercice:", error);
-                      });
-                    this.closeWorkout();
-                  })
-                  .catch((error) => {
-                    console.error("Error creating workout:", error);
-                  });
+                      console.log(data);
+
+                      axios
+                        .post(
+                          "https://modu-api.dorian-faure.fr/workout_exercices",
+                          data
+                        )
+                        .then((response) => {
+                          console.log(
+                            "Exercice linked successfully:",
+                            response.data
+                          );
+                        })
+                        .catch((error) => {
+                          console.error("Error linking exercice:", error);
+                        });
+                      this.getCurentDateWorkouts();
+                      this.closeWorkout();
+                    })
+                    .catch((error) => {
+                      console.error("Error creating workout:", error);
+                    });
+                }
               });
           });
       } else {
@@ -379,6 +406,25 @@ export default {
             .catch((error) => {
               console.error("Error linking exercice:", error);
             });
+        });
+    },
+    async deleteWorkout() {
+      if (
+        this.selected.id === undefined ||
+        this.selected.id === null ||
+        this.selected.id === -1
+      )
+        return;
+
+      await axios
+        .delete(`https://modu-api.dorian-faure.fr/workout/` + this.selected.id)
+        .then((response) => {
+          console.log("Workout deleted successfully:", response.data);
+          this.getCurentDateWorkouts();
+          this.closeWorkout();
+        })
+        .catch((error) => {
+          console.error("Error deleting workout:", error);
         });
     },
     async removeExToWorkout(id) {
@@ -676,13 +722,21 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  margin-top: 5px;
 }
 
 .times-select {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 15px;
+}
+
+.times-select:nth-child(2) {
+  margin-top: -10px;
+}
+
+.times-select .v-text-field {
+  width: 50%;
 }
 </style>
