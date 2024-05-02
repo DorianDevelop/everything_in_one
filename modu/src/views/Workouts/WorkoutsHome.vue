@@ -234,17 +234,19 @@ export default {
           .then((new_id) => {
             let selectedWorkout = this.getWorkoutById(this.selected.id);
 
-            let data = {
+            let datas = {
               start_min: selectedWorkout.start_min,
               duration_min: selectedWorkout.duration_min,
               name: selectedWorkout.name,
               type: selectedWorkout.type,
               the_date: this.formatDateToYYYYMMDD(this.selectedDate),
-              id_user: this.$cookies.get("id_user"),
+              id_user: parseInt(this.$cookies.get("id_user")),
             };
 
+            console.log(datas);
+
             axios
-              .post("https://modu-api.dorian-faure.fr/workout/", data)
+              .post("https://modu-api.dorian-faure.fr/workout/", datas)
               .then((response) => {
                 console.log("Workout created successfully:", response.data);
                 this.allExTODO
