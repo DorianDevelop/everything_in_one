@@ -50,13 +50,18 @@
     </div>
     <div class="workout-details" v-else>
       <div class="all-btns">
-        <v-btn class="ma-2" color="green-darken-2"> SAVE </v-btn>
-        <v-btn class="ma-2" color="primary" @click="closeWorkout()">
-          <v-icon icon="mdi-arrow-up" start></v-icon>
+        <v-btn class="ma-2" color="green-darken-2" size="small"> SAVE </v-btn>
+        <v-btn
+          class="ma-2"
+          color="primary"
+          size="small"
+          @click="closeWorkout()"
+        >
+          <v-icon icon="mdi-arrow-up" size="small" start></v-icon>
           CLOSE
-          <v-icon icon="mdi-arrow-up" end></v-icon>
+          <v-icon icon="mdi-arrow-up" size="small" end></v-icon>
         </v-btn>
-        <v-btn class="ma-2" color="red-darken-2"> DELETE </v-btn>
+        <v-btn class="ma-2" color="red-darken-2" size="small"> DELETE </v-btn>
       </div>
       <div class="add-workout">
         <v-autocomplete
@@ -88,6 +93,7 @@
           },
           { title: 'Sets', key: 'sets_number' },
           { title: 'Order', key: 'the_order' },
+          { title: 'ID', key: 'id' },
           { title: 'Actions', key: 'actions', sortable: false },
         ]"
         :items="selected.allExTODO"
@@ -96,16 +102,22 @@
         <template v-slot:item.actions="{ item }">
           <div class="actions">
             <div class="change-order">
-              <v-icon size="small" @click="console.log('move up')">
+              <v-icon
+                size="small"
+                @click="changeOrderOfExercice(item.id, item.the_order + 1)"
+              >
                 mdi-arrow-up
               </v-icon>
-              <v-icon size="small" @click="console.log('move down')">
+              <v-icon
+                size="small"
+                @click="changeOrderOfExercice(item.id, item.the_order - 1)"
+              >
                 mdi-arrow-down
               </v-icon>
             </div>
             <v-icon
               size="small"
-              @click="console.log('delete')"
+              @click="removeExToWorkout(item.id)"
               color="red-darken-2"
             >
               mdi-delete
@@ -168,15 +180,15 @@ export default {
 
       await axios
         .get("https://modu-api.dorian-faure.fr/next_workout_exercices_id")
-        .then((response) => response.data)
+        .then((response) => response.data[0].AUTO_INCREMENT)
         .then((new_id) => {
-          console.log(new_id);
           let exo = this.getExerciceByName(this.newEx);
           let order =
             this.selected.allExTODO[this.selected.allExTODO.length - 1]
               .the_order + 1;
 
           this.selected.allExTODO.push({
+            id: new_id,
             id_exercice: exo.id,
             sets_number: this.newExSets,
             the_order: order,
@@ -201,9 +213,7 @@ export default {
         });
     },
     async removeExToWorkout(id) {
-      if (id === undefined || id === null) {
-        return;
-      }
+      if (id === undefined || id === null) return;
 
       await axios
         .delete(`https://modu-api.dorian-faure.fr/workout_exercices/` + id)
@@ -229,6 +239,58 @@ export default {
         .then((response) => response.data)
         .then((data) => {
           this.selected.allExTODO = data;
+        });
+    },
+    async changeOrderOfExercice(id, new_order) {
+      if (id === undefined || id === null) return;
+
+      console.log(id, new_order);
+
+      const exoToChange = this.selected.allExTODO.find((exo) => exo.id === id);
+
+      const exoToChangeIndex = this.selected.allExTODO.indexOf(exoToChange);
+      let valueOrder1 = exoToChange.the_order;
+
+      const exoWithNewOrder = this.selected.allExTODO.find(
+        (exo) => exo.the_order === new_order
+      );
+
+      console.log(exoWithNewOrder);
+
+      if (!exoWithNewOrder) {
+        return;
+      }
+      console.log(exoWithNewOrder);
+
+      const exoWithNewOrderIndex =
+        this.selected.allExTODO.indexOf(exoWithNewOrder);
+
+      this.selected.allExTODO[exoToChangeIndex].the_order =
+        exoWithNewOrder.the_order;
+      this.selected.allExTODO[exoWithNewOrderIndex].the_order = valueOrder1;
+
+      await axios
+        .put(
+          "https://modu-api.dorian-faure.fr/workout_exercices_order/" +
+            exoToChange.id,
+          { the_order: this.selected.allExTODO[exoToChangeIndex].the_order }
+        )
+        .then((response) => {
+          axios
+            .put(
+              "https://modu-api.dorian-faure.fr/workout_exercices_order/" +
+                exoWithNewOrder.id,
+              {
+                the_order:
+                  this.selected.allExTODO[exoWithNewOrderIndex].the_order,
+              }
+            )
+            .catch((error) => {
+              console.error("Error updating exercice:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error updating exercice:", error);
         });
     },
     getExerciceByName(id) {
@@ -320,7 +382,6 @@ export default {
 
 .list-workouts {
   overflow-y: auto;
-  height: 485px;
 
   display: flex;
   flex-direction: column;
@@ -355,7 +416,6 @@ export default {
 
 .workout-details {
   overflow-y: auto;
-  height: 485px;
 
   display: flex;
   flex-direction: column;
@@ -365,7 +425,7 @@ export default {
 }
 
 .all-btns .v-btn {
-  width: 120px;
+  width: 100px;
 }
 
 .add-workout {

@@ -274,9 +274,20 @@ router.post('/workout_exercices', (req, res) => {
 
 router.put('/workout_exercices/:id', (req, res) => {
 	const id = req.params.id;
-	const datas = [req.body.id_exercice, req.body.id_workout, req.body.sets_number, req.body.notes, id];
+	const datas = [req.body.id_exercice, req.body.id_workout, req.body.sets_number, req.body.notes, req.body.the_order, id];
 
-	const query = 'UPDATE `workout_exercices` SET `id_exercice` = ?, `id_workout` = ?, `sets_number` = ?, `notes` = ? WHERE `id` = ?';
+	const query = 'UPDATE `workout_exercices` SET `id_exercice` = ?, `id_workout` = ?, `sets_number` = ?, `notes` = ?, `the_order` = ? WHERE `id` = ?';
+
+	db.query(query, datas, (error, results) => {
+		handler.handleReponse(res, error, null, 'Modification succeed!');
+	});
+});
+
+router.put('/workout_exercices_order/:id', (req, res) => {
+	const id = req.params.id;
+	const datas = [req.body.the_order, id];
+
+	const query = 'UPDATE `workout_exercices` SET `the_order` = ? WHERE `id` = ?';
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
