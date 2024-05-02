@@ -21,7 +21,9 @@
         </v-btn>
       </div>
 
-      <v-btn color="primary" size="small"> Ajouter workout </v-btn>
+      <v-btn color="primary" size="small" @click="createNewWorkoutOpen()">
+        Ajouter workout
+      </v-btn>
     </div>
     <div class="list-workouts" v-if="!selected.show">
       <v-card
@@ -50,7 +52,14 @@
     </div>
     <div class="workout-details" v-else>
       <div class="all-btns">
-        <v-btn class="ma-2" color="green-darken-2" size="small"> SAVE </v-btn>
+        <v-btn
+          class="ma-2"
+          color="green-darken-2"
+          size="small"
+          @click="saveWorkout"
+        >
+          SAVE
+        </v-btn>
         <v-btn
           class="ma-2"
           color="primary"
@@ -143,7 +152,7 @@
             :items="listHours"
             item-title="display"
             item-value="time"
-            v-model="selectedHour"
+            v-model="getWorkoutById(selected.id).start_min"
             variant="outlined"
           ></v-select>
           <v-select
@@ -151,13 +160,11 @@
             :items="listDuration"
             item-title="display"
             item-value="time"
-            v-model="selectedDuration"
+            v-model="getWorkoutById(selected.id).duration_min"
             variant="outlined"
           ></v-select>
         </div>
       </div>
-      <p>{{ selectedHour }}</p>
-      <p>{{ selectedDuration }}</p>
     </div>
   </div>
 </template>
@@ -177,6 +184,7 @@ export default {
         show: false,
         id: null,
         allExTODO: [],
+        newWorkout: false,
       },
 
       newEx: null,
@@ -213,38 +221,137 @@ export default {
         });
     },
     async saveWorkout() {
-      if (selected.id === null || selected.id === undefined) return;
+      if (this.selected.id === null || this.selected.id === undefined) return;
+      if (
+        (this.selected.id === null ||
+          this.selected.id === -1 ||
+          this.selected.id === undefined) &&
+        this.selected.newWorkout
+      ) {
+        await axios
+          .get("https://modu-api.dorian-faure.fr/next_workout_id")
+          .then((response) => response.data[0].AUTO_INCREMENT)
+          .then((new_id) => {
+            let selectedWorkout = this.getWorkoutById(this.selected.id);
 
-      let selectedWorkout = this.getWorkoutById(this.selected.id);
+            let data = {
+              start_min: selectedWorkout.start_min,
+              duration_min: selectedWorkout.duration_min,
+              name: selectedWorkout.name,
+              type: selectedWorkout.type,
+              the_date: this.formatDateToYYYYMMDD(this.selectedDate),
+            };
 
-      let data = {
-        start_min: this.selectedHour,
-        duration_min: this.selectedDuration,
-        name: selectedWorkout.name,
-        type: selectedWorkout.type,
+            axios
+              .post("https://modu-api.dorian-faure.fr/workout/", data)
+              .then((response) => {
+                console.log("Workout created successfully:", response.data);
+                this.allExTODO
+                  .forEach((exo) => {
+                    let data = {
+                      id_exercice: exo.id,
+                      id_workout: new_id,
+                      sets_number: exo.sets_number,
+                      notes: exo.notes,
+                      the_order: exo.the_order,
+                    };
+
+                    axios
+                      .post(
+                        "https://modu-api.dorian-faure.fr/workout_exercices",
+                        data
+                      )
+                      .then((response) => {
+                        console.log(
+                          "Exercice linked successfully:",
+                          response.data
+                        );
+                      })
+                      .catch((error) => {
+                        console.error("Error linking exercice:", error);
+                      });
+                    this.closeWorkout();
+                  })
+                  .catch((error) => {
+                    console.error("Error creating workout:", error);
+                  });
+              });
+          });
+      } else {
+        let selectedWorkout = this.getWorkoutById(this.selected.id);
+
+        let data = {
+          start_min: selectedWorkout.start_min,
+          duration_min: selectedWorkout.duration_min,
+          name: selectedWorkout.name,
+          type: selectedWorkout.type,
+          the_date: this.formatDateToYYYYMMDD(this.selectedDate),
+        };
+
+        await axios
+          .put(
+            "https://modu-api.dorian-faure.fr/workout/" + this.selected.id,
+            data
+          )
+          .then((response) => {
+            console.log("Workout updated successfully:", response.data);
+
+            this.closeWorkout();
+          })
+          .catch((error) => {
+            console.error("Error updating workout:", error);
+          });
+      }
+    },
+    createNewWorkoutOpen() {
+      let emptyWorkout = {
+        id: -1,
+        start_min: 1160,
+        duration_min: 90,
+        name: "",
+        type: "FACILE",
+        id_user: this.$cookies.get("id_user"),
+        the_date: this.formatDateToYYYYMMDD(this.selectedDate),
       };
 
-      await axios
-        .put("https://modu-api.dorian-faure.fr/workout/" + selected.id, data)
-        .then((response) => {
-          console.log("Workout updated successfully:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error updating workout:", error);
-        });
+      this.selected.show = true;
+      this.selected.id = emptyWorkout.id;
+      this.selected.newWorkout = true;
+      this.allWorkouts.push(emptyWorkout);
     },
     async addExToWorkout() {
       if (this.newExSets === null || this.newExSets < 1) return;
       if (this.newEx === null || this.newEx === undefined) return;
+
+      let new_order =
+        this.selected.allExTODO.length > 0
+          ? this.selected.allExTODO[this.selected.allExTODO.length - 1]
+              .the_order + 1
+          : 0;
+
+      if (
+        (this.selected.id === null ||
+          this.selected.id === -1 ||
+          this.selected.id === undefined) &&
+        this.selected.newWorkout
+      ) {
+        let exo = this.getExerciceById(this.newEx);
+        let order = new_order;
+
+        this.selected.allExTODO.push({
+          id_exercice: exo.id,
+          sets_number: this.newExSets,
+          the_order: order,
+        });
+        return;
+      }
 
       await axios
         .get("https://modu-api.dorian-faure.fr/next_workout_exercices_id")
         .then((response) => response.data[0].AUTO_INCREMENT)
         .then((new_id) => {
           let exo = this.getExerciceById(this.newEx);
-          let order =
-            this.selected.allExTODO[this.selected.allExTODO.length - 1]
-              .the_order + 1;
+          let order = new_order;
 
           this.selected.allExTODO.push({
             id: new_id,
@@ -273,6 +380,19 @@ export default {
     },
     async removeExToWorkout(id) {
       if (id === undefined || id === null) return;
+      if (
+        (this.selected.id === null ||
+          this.selected.id === -1 ||
+          this.selected.id === undefined) &&
+        this.selected.newWorkout
+      ) {
+        let updated = this.selected.allExTODO.filter((x) => {
+          return x.id != id;
+        });
+        this.selected.allExTODO = updated;
+        this.recalculateTheOrder();
+        return;
+      }
 
       await axios
         .delete(`https://modu-api.dorian-faure.fr/workout_exercices/` + id)
@@ -545,7 +665,7 @@ export default {
 }
 
 .list-exo {
-  max-height: 250px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -553,7 +673,7 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.8rem;
 }
 
 .times-select {

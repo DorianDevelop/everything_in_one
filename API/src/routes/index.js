@@ -154,6 +154,26 @@ router.delete('/workout/:id', (req, res) => {
 	});
 });
 
+router.get('/next_workout_id', (req, res) => {
+	const queryID = 'SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = "workouts" AND table_schema = "modu";';
+
+	const queryHelp = 'SET information_schema_stats_expiry = 0;';
+	db.query(queryHelp, (error, results) => {
+		if (error) {
+			console.error(error);
+			res.status(500).json({ error: 'An error occurred \n' + error });
+		} else {
+			db.query(queryID, (error, results) => {
+				if (error) {
+					res.status(500).json({ error: 'An error occurred \n' + error });
+				} else {
+					res.status(200).json(results);
+				}
+			});
+		}
+	});
+});
+
 /**
  * notes
  */
