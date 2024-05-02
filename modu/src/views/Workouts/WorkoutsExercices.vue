@@ -87,7 +87,7 @@
                 class="ajout-btn"
                 @click="saveExerciceMuscleLink(exercice.id)"
               ></v-btn>
-              <v-data-table
+              <v-data-table-virtual
                 :headers="[
                   {
                     title: 'Muscles',
@@ -112,7 +112,7 @@
                     mdi-delete
                   </v-icon>
                 </template>
-              </v-data-table>
+              </v-data-table-virtual>
             </div>
             <v-card-actions class="actions">
               <v-btn

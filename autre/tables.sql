@@ -136,6 +136,7 @@ CREATE TABLE workout_exercices(
 	id_exercice int not null,
     id_workout int not null,
     sets_number int not null default 3,
+    the_order int not null default 0,
     notes varchar(255),
     FOREIGN KEY (id_exercice) REFERENCES exercices(id)
         ON DELETE CASCADE,
