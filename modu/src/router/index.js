@@ -81,7 +81,6 @@ function getCookie(cname) {
 
 router.beforeEach((to, from, next) => {
   const id_user = getCookie("id_user"); // Assuming you have a function to get cookies
-  console.log(id_user);
 
   if (to.path !== "/" && (!id_user || id_user === "null")) {
     next({ path: "/" }); // Redirect to "/" if id_user cookie is not defined or null

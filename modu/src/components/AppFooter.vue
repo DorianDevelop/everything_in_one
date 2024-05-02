@@ -8,19 +8,19 @@
       :elevation="0"
     >
       <v-btn to="/diet/home">
-        <v-icon>mdi-home</v-icon>
+        <v-icon size="small">mdi-home</v-icon>
 
         <span>Home</span>
       </v-btn>
 
       <v-btn to="/diet/schedules">
-        <v-icon>mdi-calendar-month</v-icon>
+        <v-icon size="small">mdi-calendar-month</v-icon>
 
         <span>Schedules</span>
       </v-btn>
 
       <v-btn to="/diet/stats">
-        <v-icon>mdi-chart-line</v-icon>
+        <v-icon size="small">mdi-chart-line</v-icon>
 
         <span>Stats</span>
       </v-btn>
@@ -33,24 +33,24 @@
       :elevation="0"
     >
       <v-btn to="/workouts/home">
-        <v-icon>mdi-home</v-icon>
+        <v-icon size="small">mdi-home</v-icon>
 
         <span>Home</span>
       </v-btn>
 
       <v-btn to="/workouts/schedules">
-        <v-icon>mdi-calendar-month</v-icon>
+        <v-icon size="small">mdi-calendar-month</v-icon>
 
         <span>Schedules</span>
       </v-btn>
 
       <v-btn to="/workouts/stats">
-        <v-icon>mdi-chart-line</v-icon>
+        <v-icon size="small">mdi-chart-line</v-icon>
 
         <span>Stats</span>
       </v-btn>
       <v-btn to="/workouts/exercices">
-        <v-icon>mdi-dumbbell</v-icon>
+        <v-icon size="small">mdi-dumbbell</v-icon>
 
         <span>Exercices</span>
       </v-btn>
@@ -62,31 +62,31 @@
       mode="shift"
     >
       <v-btn to="/">
-        <v-icon>mdi-login</v-icon>
+        <v-icon size="small">mdi-login</v-icon>
 
         <span>Login</span>
       </v-btn>
 
       <v-btn to="/diet/home">
-        <v-icon>mdi-food</v-icon>
+        <v-icon size="small">mdi-food</v-icon>
 
         <span>Diet</span>
       </v-btn>
 
       <v-btn to="/workouts/home">
-        <v-icon>mdi-dumbbell</v-icon>
+        <v-icon size="small">mdi-dumbbell</v-icon>
 
         <span>Workouts</span>
       </v-btn>
 
       <v-btn to="/hours">
-        <v-icon>mdi-clock-time-eight</v-icon>
+        <v-icon size="small">mdi-clock-time-eight</v-icon>
 
         <span>Hours</span>
       </v-btn>
 
       <v-btn to="/notes">
-        <v-icon>mdi-note</v-icon>
+        <v-icon size="small">mdi-note</v-icon>
 
         <span>Notes</span>
       </v-btn>
@@ -144,14 +144,12 @@ export default {
 .v-layout {
   display: flex;
   flex-direction: column;
+  height: 80px !important;
 }
 
 .v-bottom-navigation .v-bottom-navigation__content > .v-btn {
   max-width: 20%;
   min-width: 20%;
-}
-
-.alternate-menu {
-  height: 44px !important;
+  height: 40px !important;
 }
 </style>

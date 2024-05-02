@@ -21,7 +21,7 @@
         </v-btn>
       </div>
 
-      <v-btn color="primary"> Ajouter workout </v-btn>
+      <v-btn color="primary" size="small"> Ajouter workout </v-btn>
     </div>
     <div class="list-workouts" v-if="!selected.show">
       <v-card
@@ -39,9 +39,9 @@
 
           <v-card-subtitle class="card-sub">
             <span
-              >{{ minutesToHour(workout.start_min) }} -
+              >{{ minutesToHour(workout.start_min, "H") }} -
               {{
-                minutesToHour(workout.start_min + workout.duration_min)
+                minutesToHour(workout.start_min + workout.duration_min, "H")
               }}</span
             >{{ workout.type }}
           </v-card-subtitle>
@@ -79,7 +79,7 @@
             :min="0"
             v-model="newExSets"
           ></v-number-input>
-          <v-btn @click="addExToWorkout">
+          <v-btn @click="addExToWorkout" color="green-darken-4">
             <v-icon icon="mdi-plus"></v-icon>
           </v-btn>
         </div>
@@ -89,28 +89,32 @@
           {
             title: 'Exercice',
             key: 'id_exercice',
-            value: (item) => `${getExerciceByName(item.id_exercice).name}`,
+            value: (item) => `${getExerciceById(item.id_exercice).name}`,
           },
           { title: 'Sets', key: 'sets_number' },
-          { title: 'Order', key: 'the_order' },
-          { title: 'ID', key: 'id' },
           { title: 'Actions', key: 'actions', sortable: false },
         ]"
         :items="selected.allExTODO"
         :sort-by="[{ key: 'the_order', order: 'asc' }]"
+        class="list-exo"
       >
         <template v-slot:item.actions="{ item }">
           <div class="actions">
             <div class="change-order">
               <v-icon
-                size="small"
-                @click="changeOrderOfExercice(item.id, item.the_order + 1)"
+                @click="changeOrderOfExercice(item.id, item.the_order - 1)"
+                :disabled="item.the_order <= 0"
               >
                 mdi-arrow-up
               </v-icon>
               <v-icon
-                size="small"
-                @click="changeOrderOfExercice(item.id, item.the_order - 1)"
+                @click="changeOrderOfExercice(item.id, item.the_order + 1)"
+                :disabled="
+                  item.the_order >=
+                  selected.allExTODO
+                    .sort((a, b) => a.the_order - b.the_order)
+                    .slice(-1)[0].the_order
+                "
               >
                 mdi-arrow-down
               </v-icon>
@@ -125,7 +129,35 @@
           </div>
         </template>
       </v-data-table-virtual>
-      <p>Edit nom workout, temps, etc..</p>
+
+      <div class="change-infos">
+        <v-text-field
+          hide-details="auto"
+          placeholder="Push spé. Épaule"
+          label="Workout name"
+          v-model="getWorkoutById(this.selected.id).name"
+        ></v-text-field>
+        <div class="times-select">
+          <v-select
+            label="Début entrainement"
+            :items="listHours"
+            item-title="display"
+            item-value="time"
+            v-model="selectedHour"
+            variant="outlined"
+          ></v-select>
+          <v-select
+            label="Durée entrainement"
+            :items="listDuration"
+            item-title="display"
+            item-value="time"
+            v-model="selectedDuration"
+            variant="outlined"
+          ></v-select>
+        </div>
+      </div>
+      <p>{{ selectedHour }}</p>
+      <p>{{ selectedDuration }}</p>
     </div>
   </div>
 </template>
@@ -149,10 +181,16 @@ export default {
 
       newEx: null,
       newExSets: 3,
+
+      listHours: [],
+      listDuration: [],
+      selectedHour: 1160,
+      selectedDuration: 90,
     };
   },
   async mounted() {
     this.getCurentDateWorkouts();
+    this.createArraysForHoursAndDuration();
     await axios
       .get("https://modu-api.dorian-faure.fr/exercices")
       .then((response) => response.data)
@@ -174,6 +212,27 @@ export default {
           this.allWorkouts = data;
         });
     },
+    async saveWorkout() {
+      if (selected.id === null || selected.id === undefined) return;
+
+      let selectedWorkout = this.getWorkoutById(this.selected.id);
+
+      let data = {
+        start_min: this.selectedHour,
+        duration_min: this.selectedDuration,
+        name: selectedWorkout.name,
+        type: selectedWorkout.type,
+      };
+
+      await axios
+        .put("https://modu-api.dorian-faure.fr/workout/" + selected.id, data)
+        .then((response) => {
+          console.log("Workout updated successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error updating workout:", error);
+        });
+    },
     async addExToWorkout() {
       if (this.newExSets === null || this.newExSets < 1) return;
       if (this.newEx === null || this.newEx === undefined) return;
@@ -182,7 +241,7 @@ export default {
         .get("https://modu-api.dorian-faure.fr/next_workout_exercices_id")
         .then((response) => response.data[0].AUTO_INCREMENT)
         .then((new_id) => {
-          let exo = this.getExerciceByName(this.newEx);
+          let exo = this.getExerciceById(this.newEx);
           let order =
             this.selected.allExTODO[this.selected.allExTODO.length - 1]
               .the_order + 1;
@@ -228,6 +287,7 @@ export default {
         return x.id != id;
       });
       this.selected.allExTODO = updated;
+      this.recalculateTheOrder();
     },
 
     async selectWorkout(workout) {
@@ -244,8 +304,6 @@ export default {
     async changeOrderOfExercice(id, new_order) {
       if (id === undefined || id === null) return;
 
-      console.log(id, new_order);
-
       const exoToChange = this.selected.allExTODO.find((exo) => exo.id === id);
 
       const exoToChangeIndex = this.selected.allExTODO.indexOf(exoToChange);
@@ -255,12 +313,9 @@ export default {
         (exo) => exo.the_order === new_order
       );
 
-      console.log(exoWithNewOrder);
-
       if (!exoWithNewOrder) {
         return;
       }
-      console.log(exoWithNewOrder);
 
       const exoWithNewOrderIndex =
         this.selected.allExTODO.indexOf(exoWithNewOrder);
@@ -269,39 +324,51 @@ export default {
         exoWithNewOrder.the_order;
       this.selected.allExTODO[exoWithNewOrderIndex].the_order = valueOrder1;
 
-      await axios
-        .put(
-          "https://modu-api.dorian-faure.fr/workout_exercices_order/" +
-            exoToChange.id,
-          { the_order: this.selected.allExTODO[exoToChangeIndex].the_order }
-        )
-        .then((response) => {
-          axios
-            .put(
-              "https://modu-api.dorian-faure.fr/workout_exercices_order/" +
-                exoWithNewOrder.id,
-              {
-                the_order:
-                  this.selected.allExTODO[exoWithNewOrderIndex].the_order,
-              }
-            )
-            .catch((error) => {
-              console.error("Error updating exercice:", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error updating exercice:", error);
-        });
+      this.recalculateTheOrder();
     },
-    getExerciceByName(id) {
+    recalculateTheOrder() {
+      this.selected.allExTODO.sort((a, b) => a.the_order - b.the_order);
+      let begin = 0;
+      this.selected.allExTODO.forEach((e) => {
+        e.the_order = begin++;
+        axios
+          .put(
+            "https://modu-api.dorian-faure.fr/workout_exercices_order/" + e.id,
+            {
+              the_order: e.the_order,
+            }
+          )
+          .catch((error) => {
+            console.error("Error updating exercice:", error);
+          });
+      });
+    },
+    getExerciceById(id) {
       return this.allExercices.find((ex) => ex.id === id);
+    },
+    getWorkoutById(id) {
+      return this.allWorkouts.find((w) => w.id === id);
+    },
+    createArraysForHoursAndDuration() {
+      for (let i = 0; i < 24 * 6; i++) {
+        this.listHours.push({
+          time: i * 10,
+          display: this.minutesToHour(i * 10, " heures "),
+        });
+      }
+      for (let i = 0; i < 4 * 6; i++) {
+        this.listDuration.push({
+          time: i * 10,
+          display: this.minutesToHour(i * 10, " heures "),
+        });
+      }
     },
     closeWorkout() {
       this.selected.show = false;
       this.selected.id = null;
       this.selected.allExTODO = [];
     },
-    minutesToHour(integer) {
+    minutesToHour(integer, between) {
       // Calculate hours
       var hours = Math.floor(parseInt(integer) / 60);
       // Calculate minutes
@@ -312,7 +379,7 @@ export default {
       var minuteString = minutes < 10 ? "0" + minutes : minutes.toString();
 
       // Concatenate hours and minutes
-      var timeString = hourString + ":" + minuteString;
+      var timeString = hourString + between + minuteString;
 
       return timeString;
     },
@@ -404,6 +471,8 @@ export default {
 .date {
   display: flex;
   width: 300px;
+  margin-bottom: -15px;
+  margin-top: -15px;
   justify-content: space-between;
   align-items: center;
   font-size: 1.2rem;
@@ -421,7 +490,7 @@ export default {
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .all-btns .v-btn {
@@ -435,8 +504,9 @@ export default {
 .number-add {
   width: 100%;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
 
+  margin-top: -8px;
   padding-top: 10px;
   position: relative;
   border-top: 1px solid #6c6c6c;
@@ -452,6 +522,7 @@ export default {
   font-size: 0.85rem;
   background: #121212;
   padding: 0 15px;
+  text-wrap: nowrap;
 }
 
 .number-add .v-number-input,
@@ -471,5 +542,24 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 7px;
+}
+
+.list-exo {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.change-infos {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.times-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
 }
 </style>

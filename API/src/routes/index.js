@@ -125,9 +125,9 @@ router.get('/workout/:id', (req, res) => {
 });
 
 router.post('/workout', (req, res) => {
-	const datas = [req.body.start_min, req.body.duration_min, req.body.type, req.body.the_date, req.body.id_user];
+	const datas = [req.body.start_min, req.body.duration_min, req.body.type, req.body.name, req.body.the_date, req.body.id_user];
 
-	const query = 'INSERT INTO `workouts`(`start_min`, `duration_min`, `type`, `the_date`, `id_user`) VALUES (?, ?, ?, ?, ?)';
+	const query = 'INSERT INTO `workouts`(`start_min`, `duration_min`, `type`, `name`, `the_date`, `id_user`) VALUES (?, ?, ?, ?, ?)';
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
@@ -136,9 +136,9 @@ router.post('/workout', (req, res) => {
 
 router.put('/workout/:id', (req, res) => {
 	const id = req.params.id;
-	const datas = [req.body.start_min, req.body.duration_min, req.body.type, req.body.the_date, id];
+	const datas = [req.body.start_min, req.body.duration_min, req.body.type, req.body.name, req.body.the_date, id];
 
-	const query = 'UPDATE `workouts` SET `start_min` = ?, `duration_min` = ?, `type` = ?, `the_date` = ? WHERE `id` = ?;';
+	const query = 'UPDATE `workouts` SET `start_min` = ?, `duration_min` = ?, `type` = ?, `name` = ?, `the_date` = ? WHERE `id` = ?;';
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
