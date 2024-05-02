@@ -166,32 +166,58 @@ export default {
       if (this.newExSets === null || this.newExSets < 1) return;
       if (this.newEx === null || this.newEx === undefined) return;
 
-      let exo = this.getExerciceByName(this.newEx);
-      let order =
-        this.selected.allExTODO[this.selected.allExTODO.length - 1].the_order +
-        1;
-      this.selected.allExTODO.push({
-        id_exercice: exo.id,
-        sets_number: this.newExSets,
-        the_order: order,
-      });
+      await axios
+        .get("https://modu-api.dorian-faure.fr/next_workout_exercices_id")
+        .then((response) => response.data)
+        .then((data) => {
+          console.log(data);
+          let exo = this.getExerciceByName(this.newEx);
+          let order =
+            this.selected.allExTODO[this.selected.allExTODO.length - 1]
+              .the_order + 1;
 
-      let data = {
-        id_exercice: this.newEx,
-        id_workout: this.selected.id,
-        sets_number: this.newExSets,
-        notes: "nothing for now",
-        the_order: order,
-      };
+          this.selected.allExTODO.push({
+            id_exercice: exo.id,
+            sets_number: this.newExSets,
+            the_order: order,
+          });
+
+          let data = {
+            id_exercice: this.newEx,
+            id_workout: this.selected.id,
+            sets_number: this.newExSets,
+            notes: "nothing for now",
+            the_order: order,
+          };
+
+          axios
+            .post("https://modu-api.dorian-faure.fr/workout_exercices", data)
+            .then((response) => {
+              console.log("Exercice linked successfully:", response.data);
+            })
+            .catch((error) => {
+              console.error("Error linking exercice:", error);
+            });
+        });
+    },
+    async removeExToWorkout(id) {
+      if (id === undefined || id === null) {
+        return;
+      }
 
       await axios
-        .post("https://modu-api.dorian-faure.fr/workout_exercices", data)
+        .delete(`https://modu-api.dorian-faure.fr/workout_exercices/` + id)
         .then((response) => {
-          console.log("Exercice linked successfully:", response.data);
+          console.log("Link deleted successfully:", response.data);
         })
         .catch((error) => {
-          console.error("Error linking exercice:", error);
+          console.error("Error deleting link:", error);
         });
+
+      let updated = this.selected.allExTODO.filter((x) => {
+        return x.id != id;
+      });
+      this.selected.allExTODO = updated;
     },
 
     async selectWorkout(workout) {
@@ -211,6 +237,7 @@ export default {
     closeWorkout() {
       this.selected.show = false;
       this.selected.id = null;
+      this.selected.allExTODO = [];
     },
     minutesToHour(integer) {
       // Calculate hours
@@ -238,12 +265,14 @@ export default {
       newDate.setDate(newDate.getDate() - 1);
       this.selectedDate = newDate;
       this.getCurentDateWorkouts();
+      this.closeWorkout();
     },
     getNextDate() {
       const newDate = new Date(this.selectedDate);
       newDate.setDate(newDate.getDate() + 1);
       this.selectedDate = newDate;
       this.getCurentDateWorkouts();
+      this.closeWorkout();
     },
     formatDate(date) {
       const daysOfWeek = [

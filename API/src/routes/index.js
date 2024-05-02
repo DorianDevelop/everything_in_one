@@ -263,7 +263,7 @@ router.get('/workout_exercices/:id', (req, res) => {
 });
 
 router.post('/workout_exercices', (req, res) => {
-	const datas = [req.body.id_exercice, req.body.id_workout, req.body.sets_number, req.body.notes];
+	const datas = [req.body.id_exercice, req.body.id_workout, req.body.sets_number, req.body.notes, req.body.the_order];
 
 	const query = 'INSERT INTO `workout_exercices`(`id_exercice`, `id_workout`, `sets_number`, `notes`, `the_order`) VALUES (?, ?, ?, ?, ?)';
 
@@ -289,6 +289,26 @@ router.delete('/workout_exercices/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
+	});
+});
+
+router.get('/next_workout_exercices_id', (req, res) => {
+	const queryID = 'SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = "workout_exercices" AND table_schema = "modu";';
+
+	const queryHelp = 'SET information_schema_stats_expiry = 0;';
+	db.query(queryHelp, (error, results) => {
+		if (error) {
+			console.error(error);
+			res.status(500).json({ error: 'An error occurred \n' + error });
+		} else {
+			db.query(queryID, (error, results) => {
+				if (error) {
+					res.status(500).json({ error: 'An error occurred \n' + error });
+				} else {
+					res.status(200).json(results);
+				}
+			});
+		}
 	});
 });
 
