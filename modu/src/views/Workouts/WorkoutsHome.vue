@@ -169,8 +169,8 @@ export default {
       await axios
         .get("https://modu-api.dorian-faure.fr/next_workout_exercices_id")
         .then((response) => response.data)
-        .then((data) => {
-          console.log(data);
+        .then((new_id) => {
+          console.log(new_id);
           let exo = this.getExerciceByName(this.newEx);
           let order =
             this.selected.allExTODO[this.selected.allExTODO.length - 1]
