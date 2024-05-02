@@ -127,7 +127,7 @@ router.get('/workout/:id', (req, res) => {
 router.post('/workout', (req, res) => {
 	const datas = [req.body.start_min, req.body.duration_min, req.body.type, req.body.name, req.body.the_date, req.body.id_user];
 
-	const query = 'INSERT INTO `workouts`(`start_min`, `duration_min`, `type`, `name`, `the_date`, `id_user`) VALUES (?, ?, ?, ?, ?)';
+	const query = 'INSERT INTO `workouts`(`start_min`, `duration_min`, `type`, `name`, `the_date`, `id_user`) VALUES (?, ?, ?, ?, ?, ?)';
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');

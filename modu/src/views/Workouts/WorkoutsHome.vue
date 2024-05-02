@@ -240,6 +240,7 @@ export default {
               name: selectedWorkout.name,
               type: selectedWorkout.type,
               the_date: this.formatDateToYYYYMMDD(this.selectedDate),
+              id_user: this.$cookies.get("id_user"),
             };
 
             axios

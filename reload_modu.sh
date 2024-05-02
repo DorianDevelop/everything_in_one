@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git pull
+
 # Stop the Docker container
 docker stop modu-api
 
@@ -17,3 +19,5 @@ docker rm modu-client
 docker image rm everything_in_one_modu-api
 # Remove the Docker image
 docker image rm everything_in_one_modu-client
+
+docker-compose up -d
