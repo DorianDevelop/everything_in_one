@@ -84,11 +84,11 @@ router.get('/day/:id', (req, res) => {
  * MEALS
  */
 
-router.get('/meals/:id', (req, res) => {
-	const query = 'SELECT * FROM `meals` WHERE id_day = ?;';
-	const id = req.params.id;
+router.get('/meals', (req, res) => {
+	const datas = [req.query.id_user, req.query.the_date];
+	const query = 'SELECT * FROM `meals` WHERE id_user = ? AND the_date = ?;';
 
-	db.query(query, [id], (error, results) => {
+	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
 });
@@ -98,6 +98,24 @@ router.get('/meal/:id', (req, res) => {
 	const id = req.params.id;
 
 	db.query(query, [id], (error, results) => {
+		handler.handleReponse(res, error, results);
+	});
+});
+
+router.get('/foodsPerMeal/:id', (req, res) => {
+	const id = req.params.id;
+	const query = 'SELECT F.*, DF.quantity FROM `day_foods` as DF INNER JOIN `foods` AS F ON F.id = DF.id_food WHERE id_meal = ?;';
+
+	db.query(query, [id], (error, results) => {
+		handler.handleReponse(res, error, results);
+	});
+});
+
+router.get('/foodsPerDay', (req, res) => {
+	const datas = [req.query.id_user, req.query.the_date];
+	const query = 'SELECT F.*, DF.quantity FROM `day_foods` as DF INNER JOIN `foods` AS F ON F.id = DF.id_food WHERE id_user = ? AND the_date = ?;';
+
+	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
 });

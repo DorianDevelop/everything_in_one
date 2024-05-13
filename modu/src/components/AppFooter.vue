@@ -139,17 +139,16 @@ export default {
 <style scoped>
 .v-bottom-navigation {
   position: initial !important;
+  height: 40px !important;
 }
 
 .v-layout {
   display: flex;
   flex-direction: column;
-  height: 80px !important;
 }
 
 .v-bottom-navigation .v-bottom-navigation__content > .v-btn {
   max-width: 20%;
   min-width: 20%;
-  height: 40px !important;
 }
 </style>
