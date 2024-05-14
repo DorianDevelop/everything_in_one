@@ -16,12 +16,6 @@ router.get('/login/:pseudo', (req, res) => {
 	db.query(query, [pseudo], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.post('/signup', (req, res) => {
@@ -31,12 +25,6 @@ router.post('/signup', (req, res) => {
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -50,12 +38,6 @@ router.get('/foods', (req, res) => {
 	db.query(query, (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/foods/:type', (req, res) => {
@@ -65,12 +47,6 @@ router.get('/foods/:type', (req, res) => {
 	db.query(query, [type], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/food/:id', (req, res) => {
@@ -79,12 +55,6 @@ router.get('/food/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -99,12 +69,6 @@ router.get('/days/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/day/:id', (req, res) => {
@@ -113,12 +77,6 @@ router.get('/day/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -133,12 +91,6 @@ router.get('/meals', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/meal/:id', (req, res) => {
@@ -147,12 +99,6 @@ router.get('/meal/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -163,12 +109,6 @@ router.get('/foodsPerMeal/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/foodsPerDay', (req, res) => {
@@ -177,12 +117,6 @@ router.get('/foodsPerDay', (req, res) => {
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -197,12 +131,6 @@ router.get('/workouts', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/workout/:id', (req, res) => {
@@ -211,12 +139,6 @@ router.get('/workout/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -230,12 +152,6 @@ router.post('/workout', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.put('/workout/:id', (req, res) => {
@@ -247,12 +163,6 @@ router.put('/workout/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/workout/:id', (req, res) => {
@@ -261,12 +171,6 @@ router.delete('/workout/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -301,12 +205,6 @@ router.get('/notes/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/note/:id', (req, res) => {
@@ -315,12 +213,6 @@ router.get('/note/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -333,12 +225,6 @@ router.post('/note/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.put('/note/:id', (req, res) => {
@@ -350,12 +236,6 @@ router.put('/note/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/note/:id', (req, res) => {
@@ -364,12 +244,6 @@ router.delete('/note/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -384,12 +258,6 @@ router.get('/hours/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.post('/hour/:id', (req, res) => {
@@ -401,12 +269,6 @@ router.post('/hour/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/hour/:id', (req, res) => {
@@ -416,12 +278,6 @@ router.delete('/hour/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/hours/:id', (req, res) => {
@@ -430,12 +286,6 @@ router.delete('/hours/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -450,12 +300,6 @@ router.get('/workout_exercices/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.post('/workout_exercices', (req, res) => {
@@ -465,12 +309,6 @@ router.post('/workout_exercices', (req, res) => {
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -483,12 +321,6 @@ router.put('/workout_exercices/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.put('/workout_exercices_order/:id', (req, res) => {
@@ -500,12 +332,6 @@ router.put('/workout_exercices_order/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/workout_exercices/:id', (req, res) => {
@@ -514,12 +340,6 @@ router.delete('/workout_exercices/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -541,12 +361,6 @@ router.get('/next_workout_exercices_id', (req, res) => {
 			});
 		}
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 /**
@@ -560,12 +374,6 @@ router.get('/set/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/set_exercice_workout/:id', (req, res) => {
@@ -574,12 +382,6 @@ router.get('/set_exercice_workout/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -590,12 +392,6 @@ router.post('/set', (req, res) => {
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -608,12 +404,6 @@ router.put('/set/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/set/:id', (req, res) => {
@@ -622,12 +412,6 @@ router.delete('/set/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -641,12 +425,6 @@ router.get('/exercices', (req, res) => {
 	db.query(query, (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.get('/exercice/:id', (req, res) => {
@@ -655,12 +433,6 @@ router.get('/exercice/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -671,12 +443,6 @@ router.post('/exercice', (req, res) => {
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -689,12 +455,6 @@ router.put('/exercice/:id', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Modification succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/exercice/:id', (req, res) => {
@@ -703,12 +463,6 @@ router.delete('/exercice/:id', (req, res) => {
 
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -721,12 +475,6 @@ router.get('/muscles', (req, res) => {
 
 	db.query(query, (error, results) => {
 		handler.handleReponse(res, error, results);
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 
@@ -741,12 +489,6 @@ router.get('/exercice_muscles/:id', (req, res) => {
 	db.query(query, [id], (error, results) => {
 		handler.handleReponse(res, error, results);
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.post('/exercice_muscles', (req, res) => {
@@ -757,12 +499,6 @@ router.post('/exercice_muscles', (req, res) => {
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Creation succeed!');
 	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
-	});
 });
 
 router.delete('/exercice_muscles', (req, res) => {
@@ -771,12 +507,6 @@ router.delete('/exercice_muscles', (req, res) => {
 
 	db.query(query, datas, (error, results) => {
 		handler.handleReponse(res, error, null, 'Delete succeed!');
-	});
-
-	db.end((error) => {
-		if (error) {
-			console.error('Error closing the database connection:', error);
-		}
 	});
 });
 

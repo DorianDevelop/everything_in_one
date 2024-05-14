@@ -48,7 +48,7 @@ export default {
     };
   },
   async mounted() {
-    this.getCurentDateWorkouts();
+    this.getCurentDateMeals();
     this.createArraysForHoursAndDuration();
     await axios
       .get("https://modu-api.dorian-faure.fr/exercices")
@@ -58,6 +58,20 @@ export default {
       });
   },
   methods: {
+    async getCurentDateMeals() {
+      this.allMeals = [];
+      await axios
+        .get(
+          `https://modu-api.dorian-faure.fr/meals?id_user=${this.$cookies.get(
+            "id_user"
+          )}&the_date=${this.formatDateToYYYYMMDD(this.selectedDate)}`
+        )
+        .then((response) => response.data)
+        .then((data) => {
+          this.allMeals = data;
+          console.log(this.allMeals);
+        });
+    },
     createArraysForHoursAndDuration() {
       for (let i = 0; i < 24 * 6; i++) {
         this.listHours.push({
@@ -97,15 +111,15 @@ export default {
       const newDate = new Date(this.selectedDate);
       newDate.setDate(newDate.getDate() - 1);
       this.selectedDate = newDate;
-      this.getCurentDateWorkouts();
-      this.closeWorkout();
+      this.getCurentDateMeals();
+      //this.closeWorkout();
     },
     getNextDate() {
       const newDate = new Date(this.selectedDate);
       newDate.setDate(newDate.getDate() + 1);
       this.selectedDate = newDate;
-      this.getCurentDateWorkouts();
-      this.closeWorkout();
+      this.getCurentDateMeals();
+      //this.closeWorkout();
     },
     formatDate(date) {
       const daysOfWeek = [

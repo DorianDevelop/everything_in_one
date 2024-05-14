@@ -22,8 +22,16 @@ SET time_zone = "+00:00";
 --
 
 --
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `pseudo`) VALUES
+(1, '_Dorian');
+
+--
 -- Déchargement des données de la table `exercices`
 --
+
 
 INSERT INTO `exercices` (`id`, `name`, `online_image`) VALUES
 (1, 'Barbell Bench Press', 'https://static.strengthlevel.com/images/exercises/bench-press/howto/bench-press-howto-2-400.avif'),
@@ -464,12 +472,6 @@ INSERT INTO `muscles` (`id`, `muscle_group`) VALUES
 INSERT INTO `notes` (`id`, `id_user`, `title`, `description`) VALUES
 (1, 1, 'TODO', 'Finir workouts page ?\n\nSemaine\n  - DAY\n    - 1 ou + Workouts\n      - +ieurs exercices (exercice_workout)\n        - sets\n\nPrécharger 9 Jours avant? Proposer de charger 7 jours de plus si voulu ?\nCharger != d\'exister -> Je montre le jours, mais si y\'a pas d\'entrainement, alors rien dans la base de donnée. Quand + workout -> créer jours si existe pas et après, ajouter workout\n\nQuand workouts créer, demander si veux répétions par rapport au jours');
 
---
--- Déchargement des données de la table `users`
---
-
-INSERT INTO `users` (`id`, `pseudo`) VALUES
-(1, '_Dorian');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

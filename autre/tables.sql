@@ -77,6 +77,13 @@ CREATE TABLE meals(
         ON DELETE CASCADE
 );
 
+INSERT INTO meals(name, the_date, id_user) VALUES ("Repas 1", '2024-05-14', 1);
+
+INSERT INTO day_foods(the_date, id_food, id_meal, quantity) VALUES 
+('2024-05-14', 3, NULL, 300);
+INSERT INTO day_foods(the_date, id_food, quantity) VALUES 
+('2024-05-14', 2, 200);
+
 CREATE TABLE day_foods(
     the_date DATE NOT NULL DEFAULT (CURRENT_DATE),
     id_food int not null,
@@ -176,6 +183,7 @@ CREATE TABLE busy_times(
     the_date DATE NOT NULL DEFAULT (CURRENT_DATE)
 );
 
+/*
 CREATE TABLE meal_prep(
 	id int not null AUTO_INCREMENT PRIMARY KEY,
 	name varchar(255) not null,
@@ -193,7 +201,7 @@ CREATE TABLE meal_prep_foods(
     FOREIGN KEY (id_food) REFERENCES foods(id) 
         ON DELETE CASCADE,
     PRIMARY KEY(id_meal, id_food)
-);
+);*/
 
 CREATE TABLE weights(
 	id int not null AUTO_INCREMENT PRIMARY KEY,
