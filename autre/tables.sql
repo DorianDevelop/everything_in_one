@@ -72,6 +72,7 @@ CREATE TABLE meals(
 	id int not null AUTO_INCREMENT PRIMARY KEY,
     name varchar(50) not null default "Meal",
     the_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+    start_min float not null  default 780,
     id_user int not null,
     FOREIGN KEY (id_user) REFERENCES users(id)
         ON DELETE CASCADE

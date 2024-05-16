@@ -7,19 +7,45 @@
         <p v-for="h in listHours" :key="h">{{ minutesToHour(h) }}</p>
       </div>
     </div>
-    <v-btn color="green-darken-2" size="large" variant="outlined" @click="addNewHour(-1)">
+    <v-btn
+      color="green-darken-2"
+      size="large"
+      variant="outlined"
+      @click="addNewHour(-1)"
+    >
       Badger
     </v-btn>
     <v-btn color="green-darken-2" size="small" @click="deleteLastHour">
       Supprimer
     </v-btn>
     <div class="inputs">
-      <v-number-input :reverse="false" controlVariant="stacked" :hideInput="false" inset variant="outlined" :max="36"
-        :min="-1" v-model="newTimeHour"></v-number-input>
-      <v-number-input :reverse="true" controlVariant="stacked" :hideInput="false" inset variant="outlined" :max="60"
-        :min="-1" v-model="newTimeMinute"></v-number-input>
+      <v-number-input
+        :reverse="false"
+        controlVariant="stacked"
+        :hideInput="false"
+        inset
+        variant="outlined"
+        :max="36"
+        :min="-1"
+        v-model="newTimeHour"
+      ></v-number-input>
+      <v-number-input
+        :reverse="true"
+        controlVariant="stacked"
+        :hideInput="false"
+        inset
+        variant="outlined"
+        :max="60"
+        :min="-1"
+        v-model="newTimeMinute"
+      ></v-number-input>
     </div>
-    <v-btn color="green-darken-2" size="small" variant="outlined" @click="addNewHour(newTimeHour * 60 + newTimeMinute)">
+    <v-btn
+      color="green-darken-2"
+      size="small"
+      variant="outlined"
+      @click="addNewHour(newTimeHour * 60 + newTimeMinute)"
+    >
       Ajouter
     </v-btn>
     <v-btn color="green-darken-2" size="small" @click="deleteAllHours">
@@ -47,6 +73,7 @@ export default {
       )
       .then((response) => response.data)
       .then((data) => {
+        console.log(data);
         data.forEach((e) => {
           this.listHours.push(e.input_hour);
         });
@@ -79,7 +106,7 @@ export default {
           time - this.listHours[this.listHours.length - 1] < 45
         ) {
           this.listHours.push(this.listHours[this.listHours.length - 1] + 45);
-          this.saveNewHour(this.listHours[this.listHours.length - 1] + 45);
+          this.saveNewHour(this.listHours[this.listHours.length - 1]);
           return;
         } else {
           this.listHours.push(Math.round(time));
@@ -117,7 +144,7 @@ export default {
       await axios
         .post(
           "https://modu-api.dorian-faure.fr/hour/" +
-          this.$cookies.get("id_user"),
+            this.$cookies.get("id_user"),
           data
         )
         .then((response) => {
@@ -135,7 +162,7 @@ export default {
       await axios
         .delete(
           "https://modu-api.dorian-faure.fr/hour/" +
-          this.$cookies.get("id_user")
+            this.$cookies.get("id_user")
         )
         .then((response) => {
           console.log("Note updated successfully:", response.data);
@@ -153,7 +180,7 @@ export default {
       await axios
         .delete(
           "https://modu-api.dorian-faure.fr/hours/" +
-          this.$cookies.get("id_user")
+            this.$cookies.get("id_user")
         )
         .then((response) => {
           console.log("Note updated successfully:", response.data);
@@ -216,7 +243,7 @@ h3 {
   color: #388e3c;
 }
 
-.list>p:nth-child(odd) {
+.list > p:nth-child(odd) {
   color: #d32f2f;
 }
 </style>
